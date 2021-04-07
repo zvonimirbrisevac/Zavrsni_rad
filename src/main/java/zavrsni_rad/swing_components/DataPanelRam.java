@@ -21,6 +21,7 @@ import javax.swing.SpringLayout;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
+import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 public class DataPanelRam extends JPanel {
@@ -45,7 +46,9 @@ public class DataPanelRam extends JPanel {
 	private JCheckBox minhash;
 
 	public DataPanelRam() throws IOException {
-
+		
+		super();
+		
 		filesPanel = new JPanel(new SpringLayout());
 
 		JLabel pleaseCheck = new JLabel("Path to your ram.exe:", SwingConstants.LEFT);
@@ -272,7 +275,9 @@ public class DataPanelRam extends JPanel {
 		minhash = new JCheckBox("Use only a portion of all minimizers");
 		
 		optionalPanel.add(minhash);
+		
 		optionalPanel.add(new JPanel());
+		
 		SpringUtilities.makeCompactGrid(optionalPanel, 9, 2, 0, 0, 10, 10);
 		add(optionalPanel);
 	}

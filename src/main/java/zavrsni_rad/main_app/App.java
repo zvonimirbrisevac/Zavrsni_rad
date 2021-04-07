@@ -1,18 +1,12 @@
 package zavrsni_rad.main_app;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
-import java.awt.TextArea;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.AbstractAction;
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,12 +16,11 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import zavrsni_rad.swing_components.DataPanelMinimap2Align;
+import zavrsni_rad.swing_components.DataPanelMinimap2Index;
 import zavrsni_rad.swing_components.DataPanelRam;
 
 /**
@@ -38,12 +31,14 @@ public class App extends JFrame
 {
 	
 	private JPanel centralPanel;
-	private DataPanelRam centralRamMappingPanel;
+	private DataPanelRam ramMappingPanel;
+	private DataPanelMinimap2Index minimap2IndexingPanel;
+	private DataPanelMinimap2Align minimap2AlignPanel;
 	private PanelType dataType;
 	
 	
 	enum PanelType {
-		RAM_MAPPING, MINIMAP2_MAPPING;
+		RAM_MAPPING, MINIMAP2_MAPPING, MINIMAP2_INDEXING, MINIMAP2_ALIGN;
 	}
 	
 	public App() {
@@ -75,28 +70,66 @@ public class App extends JFrame
 		
 		ButtonGroup tools = new ButtonGroup();
 		
-		JRadioButton minimap2Radio = new JRadioButton("Minmap2");
-		tools.add(minimap2Radio);
+		JRadioButton minimap2IndRadio = new JRadioButton("Minmap2 indexing");
+		minimap2IndRadio.addActionListener((e) -> {
+			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
+			centralPanel.removeAll();
+			try {
+				minimap2IndexingPanel = new DataPanelMinimap2Index();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			dataType = PanelType.MINIMAP2_INDEXING;
+			centralPanel.add(minimap2IndexingPanel);
+			centralPanel.repaint();
+			centralPanel.revalidate();
+			this.pack();
+			
+		});
+		tools.add(minimap2IndRadio);
+		
+		JRadioButton minimap2AlignRadio = new JRadioButton("Minmap2 alignment");
+		minimap2AlignRadio.addActionListener((e) -> {
+			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
+			centralPanel.removeAll();
+			try {
+				minimap2AlignPanel = new DataPanelMinimap2Align();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			dataType = PanelType.MINIMAP2_ALIGN;
+			centralPanel.add(minimap2AlignPanel);
+			centralPanel.repaint();
+			centralPanel.revalidate();
+			this.pack();
+			
+		});
+		tools.add(minimap2AlignRadio);
 		
 		JRadioButton ramRadio = new JRadioButton("Ram");
 		ramRadio.addActionListener((e) -> {
 			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
 			centralPanel.removeAll();
 			try {
-				centralRamMappingPanel = new DataPanelRam();
+				ramMappingPanel = new DataPanelRam();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			dataType = PanelType.RAM_MAPPING;
-			centralPanel.add(centralRamMappingPanel);
+			centralPanel.add(ramMappingPanel);
+			centralPanel.repaint();
 			centralPanel.revalidate();
+			this.pack();
 			
 		});
 		tools.add(ramRadio);
 		ramRadio.doClick();
 		
-		toolsMenu.add(minimap2Radio);
+		toolsMenu.add(minimap2IndRadio);
+		toolsMenu.add(minimap2AlignRadio);
 		toolsMenu.add(ramRadio);
 		
 		menuBar.add(toolsMenu);
@@ -125,6 +158,8 @@ public class App extends JFrame
 	    buttonRun.addActionListener((e) -> {
 	    	if (dataType == PanelType.RAM_MAPPING) {
 				RamMappingExecution ramMap = new RamMappingExecution();
+			} else if (dataType == PanelType.MINIMAP2_INDEXING) {
+				MmIndexingExecution minimap2Indexing = new MmIndexingExecution();
 			}
 	    });
 	    buttonsGridPanel.add(buttonRun);
@@ -132,7 +167,9 @@ public class App extends JFrame
 	    JButton buttonDelete = new JButton("Delete");
 	    buttonDelete.addActionListener((e) -> {
 	    	if (dataType == PanelType.RAM_MAPPING) {
-	    		centralRamMappingPanel.clearFields();
+	    		ramMappingPanel.clearFields();
+	    	} else if (dataType == PanelType.MINIMAP2_INDEXING) {
+	    		minimap2IndexingPanel.clearFields();
 	    	}
 	    });
 	    buttonsGridPanel.add(buttonDelete);
@@ -175,26 +212,26 @@ public class App extends JFrame
 		protected Integer doInBackground() throws Exception {
 			ArrayList<String> commands = new ArrayList<String>();
 			
-			String ramPath = centralRamMappingPanel.getRamPath();
+			String ramPath = ramMappingPanel.getRamPath();
 			if (!ramPath.equals(""))
 				commands.add(ramPath);
 			else
 				return null;
 			
-			String targetPath = centralRamMappingPanel.getTargetPath();
+			String targetPath = ramMappingPanel.getTargetPath();
 			if (!targetPath.equals(""))
 				commands.add(targetPath);
 			else
 				return null;
 			
-			String[] seqPaths = centralRamMappingPanel.getSequencesPath();
+			String[] seqPaths = ramMappingPanel.getSequencesPath();
 			if (seqPaths != null)
 				for(String s: seqPaths)
 					commands.add(s);
 			else
 				return null;
 			
-			int bandWidth = centralRamMappingPanel.getBandField();
+			int bandWidth = ramMappingPanel.getBandField();
 			if (bandWidth == -2) 
 				return null;
 			else if (bandWidth >= 0) { 
@@ -202,7 +239,7 @@ public class App extends JFrame
 				commands.add(Integer.toString(bandWidth));
 			}
 			
-			int chain = centralRamMappingPanel.getChainField();
+			int chain = ramMappingPanel.getChainField();
 			if (chain == -2) 
 				return null;
 			else if (chain >= 0) {
@@ -210,7 +247,7 @@ public class App extends JFrame
 				commands.add(Integer.toString(chain));
 			}
 			
-			double freq = centralRamMappingPanel.getFreqField();
+			double freq = ramMappingPanel.getFreqField();
 			if (freq == -2.0) 
 				return null;
 			else if (freq >= 0) {
@@ -218,7 +255,7 @@ public class App extends JFrame
 				commands.add(Double.toString(freq));
 			}
 				
-			int gap = centralRamMappingPanel.getGapField();
+			int gap = ramMappingPanel.getGapField();
 			if (gap == -2) 
 				return null;
 			else if (gap >= 0) { 
@@ -226,7 +263,7 @@ public class App extends JFrame
 				commands.add(Integer.toString(gap));
 			}
 			
-			int kmer = centralRamMappingPanel.getKmerField();
+			int kmer = ramMappingPanel.getKmerField();
 			if (kmer == -2) 
 				return null;
 			else if (kmer >= 0) {
@@ -234,7 +271,7 @@ public class App extends JFrame
 				commands.add(Integer.toString(kmer));
 			}
 			
-			int matches = centralRamMappingPanel.getMatchesField();
+			int matches = ramMappingPanel.getMatchesField();
 			if (matches == -2) 
 				return null;
 			else if (matches >= 0) {
@@ -242,7 +279,7 @@ public class App extends JFrame
 				commands.add(Integer.toString(matches));
 			}
 				
-			int window = centralRamMappingPanel.getWindowField();
+			int window = ramMappingPanel.getWindowField();
 			if (window == -2) 
 				return null;
 			else if (window >= 0) {
@@ -250,7 +287,7 @@ public class App extends JFrame
 				commands.add(Integer.toString(window));
 			}
 				
-			int threads = centralRamMappingPanel.getThreadsField();
+			int threads = ramMappingPanel.getThreadsField();
 			if (threads == -2) 
 				return null;
 			else if (threads >= 0) {
@@ -258,14 +295,14 @@ public class App extends JFrame
 				commands.add(Integer.toString(threads));
 			}
 			
-			if (centralRamMappingPanel.getMinhash())
+			if (ramMappingPanel.getMinhash())
 				commands.add("--minhash");
 			
-			String pafPath = centralRamMappingPanel.getPafPath();
+			String pafPath = ramMappingPanel.getPafPath();
 			if (pafPath.equals(""))
 				return null;
 			
-			System.out.print("Running command: ");
+			System.out.print("Running cominimap2and: ");
 			for (String s : commands)
 				System.out.print(s + " ");
 			
@@ -290,9 +327,89 @@ public class App extends JFrame
 			
 			return null;
 		}
+	}
 		
+	private class MmIndexingExecution extends SwingWorker<Integer, Integer> {
+			
+		public MmIndexingExecution() {
+			super();
+			
+			try {
+				doInBackground();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+			
+		@Override
+		protected Integer doInBackground() throws Exception {
+			ArrayList<String> commands = new ArrayList<String>();
+				
+			String minimap2Path = minimap2IndexingPanel.getMinimap2Path();
+			if (!minimap2Path.equals("")) {
+				commands.add(minimap2Path);
+			} else {
+				return null;
+			}
+			
+			commands.add("-d");
+			
+			String indexPath = minimap2IndexingPanel.getIndexPath();
+			if (!indexPath.equals(""))
+				commands.add(indexPath);
+			else
+				return null;
+			
+			String targetPath = minimap2IndexingPanel.getTargetPath();
+			if (!targetPath.equals(""))
+				commands.add(targetPath);
+			
+			int kmer = minimap2IndexingPanel.getKmerField();
+			if (kmer == -2) 
+				return null;
+			else if (kmer >= 0) {
+				commands.add("-k");
+				commands.add(Integer.toString(kmer));
+			}
+			
+			int split = minimap2IndexingPanel.getSplitField();
+			if (split == -2) 
+				return null;
+			else if (split >= 0) {
+				commands.add("-I");
+				commands.add(Integer.toString(split));
+			}
+				
+			int window = minimap2IndexingPanel.getWindowField();
+			if (window == -2) 
+				return null;
+			else if (window >= 0) {
+				commands.add("-w");
+				commands.add(Integer.toString(window));
+			}
+			
+			if (minimap2IndexingPanel.getHomoKmer())
+				commands.add("-H");
+			
+			System.out.print("Running cominimap2and: ");
+			for (String s : commands)
+				System.out.print(s + " ");
+			System.out.println();
+			
+			ProcessBuilder pb = new ProcessBuilder(commands);
+			File errorFile = new File(indexPath.substring(0, indexPath.length() - 4) + "_stream.log");
+			errorFile.createNewFile();
+			pb.redirectError(errorFile);
+			pb.redirectOutput(new File(indexPath));
+			Process process = pb.start();
+			JOptionPane.showMessageDialog(new JFrame(), "Indexing running.", 
+					"Dialog", JOptionPane.INFORMATION_MESSAGE);
+			
+			return null;
+
 		
-		
+		}
 	}
 	
 	
