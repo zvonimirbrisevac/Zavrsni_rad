@@ -20,6 +20,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.NumberFormatter;
 
+import zavrsni_rad.swing_layouts.SpringUtilities;
+
 public class DataPanelMinimap2Index extends JPanel {
 	
 	private JPanel filesPanel;

@@ -24,6 +24,8 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
+import zavrsni_rad.swing_layouts.SpringUtilities;
+
 public class DataPanelRam extends JPanel {
 
 	private JPanel filesPanel;

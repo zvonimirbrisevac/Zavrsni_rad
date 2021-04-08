@@ -419,6 +419,7 @@ public class App extends JFrame
         	App mainApp = new App();
         	mainApp.setVisible(true);
         	mainApp.pack();
+        	
         });
     }
 }

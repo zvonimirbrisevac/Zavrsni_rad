@@ -1,5 +1,6 @@
 package zavrsni_rad.swing_components;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -20,14 +21,17 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.NumberFormatter;
 
+import zavrsni_rad.swing_layouts.SpringUtilities;
+
 public class DataPanelMinimap2Align extends JPanel {
 	
 	private JPanel filesPanel;
 	private JPanel refPanel;
 	private JPanel queryPanel;
 	private JPanel indexOptionalPanel;
-	private JPanel alignOptionalPanel;
 	private JPanel samPanel;
+	private PanelAlignOptional alignOptionalPanel;
+	private DisabledPanel disPanel;
 	private JTextField minimap2Path;
 	private JTextField refPath;
 	private JTextField queryPath;
@@ -88,7 +92,9 @@ public class DataPanelMinimap2Align extends JPanel {
 				refPath.setText(file.toPath().toString());
 			}
 			if (refPath.getText().endsWith(".mmi"))
-				indexOptionalPanel.disable();
+				disPanel.setEnabled(false);
+			else
+				disPanel.setEnabled(true);
 		});
 
 		refPanel.add(refPath);
@@ -201,8 +207,12 @@ public class DataPanelMinimap2Align extends JPanel {
 		indexOptionalPanel.add(new JPanel());
 		
 		SpringUtilities.makeCompactGrid(indexOptionalPanel, 4, 2, 0, 0, 10, 10);
-		add(indexOptionalPanel);
 		
+		disPanel = new DisabledPanel(indexOptionalPanel);
+		add(disPanel);
+		
+		alignOptionalPanel = new PanelAlignOptional();
+		add(alignOptionalPanel);
 		
 	}
 	
@@ -223,5 +233,64 @@ public class DataPanelMinimap2Align extends JPanel {
 
 		}
 		return minimap2Path.getText();
+	}
+	
+	public String getTargetPath() {
+		if (refPath.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "No ref path!", "Dialog", JOptionPane.ERROR_MESSAGE);
+
+		}
+		return refPath.getText();
+	}
+	
+	public String[] getSequencesPath() {
+		if (queryPath.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "No sequences paths!", "Dialog", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		String[] files = queryPath.getText().split(";");
+	
+		return files;
+	}
+	
+	public int getKmerField() {
+		return getIntValueFromField(kmerField, "kmer length");
+	}
+
+	public int getWindowField() {
+		return getIntValueFromField(windowField, "window length");
+	}
+	
+	public int getSplitField() {
+		return getIntValueFromField(splitField, "split index");
+	}
+	
+	public boolean getHomoKmer() {
+		return homoKmer.isSelected();
+	}
+	
+	public int getIntValueFromField(JFormattedTextField field, String dataType) {
+		String s = field.getText();
+		if (!s.equals("")) {
+			try {
+				int result = Integer.parseInt(s);
+				return result;
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Illegal " + dataType + " value!", 
+						"Dialog", JOptionPane.ERROR_MESSAGE);
+				return -2;
+			}
+			
+		}
+		return -1;
+	}
+	
+	public void clearFields() {
+		refPath.setText("");
+		queryPath.setText("");
+		splitField.setText("");
+		kmerField.setText("");
+		windowField.setText("");
+		homoKmer.setSelected(false);
 	}
 }
