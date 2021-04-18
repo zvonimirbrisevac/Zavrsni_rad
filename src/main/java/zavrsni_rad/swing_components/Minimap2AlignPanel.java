@@ -178,7 +178,7 @@ public class Minimap2AlignPanel extends JPanel {
 		JLabel presetLabel = new JLabel("Choose preset option (optional):", SwingConstants.LEFT);
 		
 		String[] presetOptions = {"", "PacBio vs reference mapping", "Nanopore vs reference mapping", "asm-to-ref mapping (~0.1% sequence divergence)",
-									"asm-to-ref mapping (~1% sequence divergence)", "asm-to-ref mapping (~5% sequence divergence)", "long-read splice alignment",
+									"asm-to-ref mapping (~1% sequence divergence)", "asm-to-ref mapping (~5% sequence divergence)", "Long-read splice alignment",
 									"PacBio-CCS spliced alignment", "Genomic short-read mapping"};
 		presetBox = new JComboBox<String>(presetOptions);
 		
@@ -235,16 +235,18 @@ public class Minimap2AlignPanel extends JPanel {
 		return refPath.getText();
 	}
 	
-	public String[] getSequencesPath() {
+	public String getSequencesPath() {
 		if (queryPath.getText().equals("")) {
 			JOptionPane.showMessageDialog(this, "No sequences paths!", "Dialog", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
-		String[] files = queryPath.getText().split(";");
+		return queryPath.getText();
 	
-		return files;
 	}
 	
+	public int getThreadsField() {
+		return getIntValueFromField(threadsField, "threads");
+	}
 	
 	
 	public int getIntValueFromField(JFormattedTextField field, String dataType) {
@@ -266,6 +268,31 @@ public class Minimap2AlignPanel extends JPanel {
 	public void clearFields() {
 		refPath.setText("");
 		queryPath.setText("");
+		threadsField.setText("");
+		presetBox.setSelectedItem("");
+		cigarBox.setSelected(false);
+	}
+
+
+	public boolean getCigarCheck() {
+		return cigarBox.isSelected();
+	}
+
+
+
+	public String getPreset() {
 		
+		switch ((String)presetBox.getSelectedItem()) {
+			case "PacBio vs reference mapping": return "map-pb";
+			case "Nanopore vs reference mapping": return "map-ont";
+			case "asm-to-ref mapping (~0.1% sequence divergence)": return "asm5";
+			case "asm-to-ref mapping (~1% sequence divergence)": return "asm10";
+			case "asm-to-ref mapping (~5% sequence divergence)": return "asm20";
+			case "Long-read splice alignment": return "splice";
+			case "PacBio-CCS spliced alignment": return "splice:hq";
+			case "Genomic short-read mapping": return "sr";			
+		}
+		
+		return "";
 	}
 }

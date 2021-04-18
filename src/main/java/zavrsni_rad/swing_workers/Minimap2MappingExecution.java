@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import javax.swing.SwingWorker;
 
 import zavrsni_rad.main_app.App;
-import zavrsni_rad.swing_components.RamPanel;
+import zavrsni_rad.swing_components.Minimap2MappingPanel;
 
-public class RamExecution extends SwingWorker<Void, Void>{
+public class Minimap2MappingExecution extends SwingWorker<Void, Void>{
 	
-	private RamPanel panel;
+	private Minimap2MappingPanel panel;
 	
-	public RamExecution(RamPanel panel) {
+	public Minimap2MappingExecution(Minimap2MappingPanel panel) {
 		super();
 		this.panel = panel;
 		
@@ -25,11 +25,17 @@ public class RamExecution extends SwingWorker<Void, Void>{
 		commands.add("java");
 		commands.add("../process_runner/ProcessRunner.java");
 		
-		String ramPath = panel.getRamPath();
-		if (!ramPath.equals(""))
-			commands.add(ramPath);
+		String minimap2Path = panel.getMinimap2Path();
+		if (!minimap2Path.equals(""))
+			commands.add(minimap2Path);
 		else
 			return null;
+		
+		String preset = panel.getPreset();
+		if (!preset.equals("")) {
+			commands.add("-x");
+			commands.add(preset);
+		}
 		
 		int threads = panel.getThreadsField();
 		if (threads == -2) 
@@ -53,7 +59,7 @@ public class RamExecution extends SwingWorker<Void, Void>{
 		else
 			return null;
 		
-		commands.add(App.PanelType.RAM_MAPPING.toString());
+		commands.add(App.PanelType.MINIMAP2_ALIGN.toString());
 		
 		for (String s : commands)
 			System.out.print(s + " ");

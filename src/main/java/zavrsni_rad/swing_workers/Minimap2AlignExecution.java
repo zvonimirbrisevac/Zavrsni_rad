@@ -7,29 +7,37 @@ import java.util.ArrayList;
 import javax.swing.SwingWorker;
 
 import zavrsni_rad.main_app.App;
-import zavrsni_rad.swing_components.RamPanel;
+import zavrsni_rad.swing_components.Minimap2AlignPanel;
 
-public class RamExecution extends SwingWorker<Void, Void>{
+public class Minimap2AlignExecution extends SwingWorker<Integer, Integer> {
 	
-	private RamPanel panel;
+	private Minimap2AlignPanel panel;
 	
-	public RamExecution(RamPanel panel) {
+	public Minimap2AlignExecution(Minimap2AlignPanel panel) {
 		super();
 		this.panel = panel;
 		
 	}
 	
 	@Override
-	protected Void doInBackground() throws Exception {
+	protected Integer doInBackground() throws Exception {
 		ArrayList<String> commands = new ArrayList<String>();
 		commands.add("java");
-		commands.add("../process_runner/ProcessRunner.java");
+		commands.add("/home/zvonimir/Desktop/zavrsni/Zavrsni_rad/src/main/java/zavrsni_rad/process_runner/ProcessRunner.java");
 		
-		String ramPath = panel.getRamPath();
-		if (!ramPath.equals(""))
-			commands.add(ramPath);
+		String minimap2Path = panel.getMinimap2Path();
+		if (!minimap2Path.equals(""))
+			commands.add(minimap2Path);
 		else
 			return null;
+		
+		String preset = panel.getPreset();
+		if (!preset.equals("")) {
+			commands.add("-ax");
+			commands.add(preset);
+		} else {
+			commands.add("-a");
+		}
 		
 		int threads = panel.getThreadsField();
 		if (threads == -2) 
@@ -39,6 +47,9 @@ public class RamExecution extends SwingWorker<Void, Void>{
 			commands.add(Integer.toString(threads));
 		}
 		
+		boolean cigar = panel.getCigarCheck();
+		if (cigar)
+			commands.add("-c");
 		
 		String targetPath = panel.getTargetPath();
 		if (!targetPath.equals(""))
@@ -53,7 +64,7 @@ public class RamExecution extends SwingWorker<Void, Void>{
 		else
 			return null;
 		
-		commands.add(App.PanelType.RAM_MAPPING.toString());
+		commands.add(App.PanelType.MINIMAP2_ALIGN.toString());
 		
 		for (String s : commands)
 			System.out.print(s + " ");
@@ -73,4 +84,5 @@ public class RamExecution extends SwingWorker<Void, Void>{
 		
 		return null;
 	}
+	
 }

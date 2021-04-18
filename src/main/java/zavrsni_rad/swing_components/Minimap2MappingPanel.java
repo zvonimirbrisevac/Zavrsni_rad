@@ -11,6 +11,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
@@ -159,5 +160,67 @@ public class Minimap2MappingPanel extends JPanel{
 		String path = reader.readLine();
 		reader.close();
 		return path == null ? "" : path;
+	}
+	
+	public String getMinimap2Path() {
+		if (minimap2Path.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "No Minimap2 path!", "Error", JOptionPane.ERROR_MESSAGE);
+
+		}
+		return minimap2Path.getText();
+	}
+	
+	public String getTargetPath() {
+		if (refPath.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "No reference path!", "Error", JOptionPane.ERROR_MESSAGE);
+
+		}
+		return refPath.getText();
+	}
+	
+	public String getSequencesPath() {
+		if (queryPath.getText().equals("")) {
+			JOptionPane.showMessageDialog(this, "No sequences paths!", "Error", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		return queryPath.getText();
+	
+	}
+	
+	public int getThreadsField() {
+		return getIntValueFromField(threadsField, "threads");
+	}
+	
+	
+	public int getIntValueFromField(JFormattedTextField field, String dataType) {
+		String s = field.getText();
+		if (!s.equals("")) {
+			try {
+				int result = Integer.parseInt(s);
+				return result;
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Illegal " + dataType + " value!", 
+						"Dialog", JOptionPane.ERROR_MESSAGE);
+				return -2;
+			}
+			
+		}
+		return -1;
+	}
+	
+	public void clearFields() {
+		refPath.setText("");
+		queryPath.setText("");
+		threadsField.setText("");
+		presetBox.setSelectedItem("");
+	}
+
+	public String getPreset() {		
+		switch ((String)presetBox.getSelectedItem()) {
+			case "PacBio read overlap": return "ava-pb";
+			case "Nanopore read overlap": return "ava-ont";
+		}
+		
+		return "";
 	}
 }

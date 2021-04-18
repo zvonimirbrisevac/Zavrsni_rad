@@ -1,4 +1,6 @@
-
+all_processes/
+output_files/
+processes_streams/
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse
 

@@ -28,7 +28,10 @@ import zavrsni_rad.swing_components.Minimap2IndexPanel;
 import zavrsni_rad.swing_components.RamPanel;
 import zavrsni_rad.swing_components.Minimap2MappingPanel;
 import zavrsni_rad.swing_components.RavenPanel;
+import zavrsni_rad.swing_workers.Minimap2AlignExecution;
+import zavrsni_rad.swing_workers.Minimap2MappingExecution;
 import zavrsni_rad.swing_workers.RamExecution;
+import zavrsni_rad.swing_workers.RavenExecution;
 
 /**
  * Hello world!
@@ -38,15 +41,16 @@ public class App extends JFrame
 {
 	
 	private JPanel centralPanel;
-	private RamPanel ramMappingPanel;
+	private JPanel centralDataPanel;
+	/*private RamPanel ramMappingPanel;
 	private Minimap2IndexPanel minimap2IndexingPanel;
 	private Minimap2AlignPanel minimap2AlignPanel;
 	private Minimap2MappingPanel minimap2MappingPanel;
-	private RavenPanel ravenPanel;
+	private RavenPanel ravenPanel;*/
 	private PanelType dataType;
 	
 	
-	enum PanelType {
+	public enum PanelType {
 		RAM_MAPPING, MINIMAP2_MAPPING, MINIMAP2_INDEXING, MINIMAP2_ALIGN, RAVEN;
 	}
 	
@@ -66,6 +70,7 @@ public class App extends JFrame
 	}
 	
 	protected void initGUI() throws IOException {
+		System.out.println("Current directory: " + System.getProperty("user.dir"));
 		System.out.println("Initialazing GUI..");
 		LayoutManager layout = new BorderLayout();
 		this.setLayout(layout);
@@ -81,15 +86,13 @@ public class App extends JFrame
 		
 		JRadioButton minimap2IndRadio = new JRadioButton("Minimap2 indexing");
 		minimap2IndRadio.addActionListener((e) -> {
-			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
 			centralPanel.removeAll();
 			try {
-				minimap2IndexingPanel = new Minimap2IndexPanel();
+				centralDataPanel = new Minimap2IndexPanel();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			centralPanel.add(minimap2IndexingPanel, BorderLayout.CENTER);
+			centralPanel.add(centralDataPanel, BorderLayout.CENTER);
 			dataType = PanelType.MINIMAP2_INDEXING;
 			centralPanel.revalidate();
 			centralPanel.repaint();
@@ -100,15 +103,13 @@ public class App extends JFrame
 		
 		JRadioButton minimap2AlignRadio = new JRadioButton("Minimap2 alignment");
 		minimap2AlignRadio.addActionListener((e) -> {
-			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
 			centralPanel.removeAll();
 			try {
-				minimap2AlignPanel = new Minimap2AlignPanel();
+				centralDataPanel = new Minimap2AlignPanel();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			centralPanel.add(minimap2AlignPanel, BorderLayout.CENTER);
+			centralPanel.add(centralDataPanel, BorderLayout.CENTER);
 			dataType = PanelType.MINIMAP2_ALIGN;
 			centralPanel.revalidate();
 			centralPanel.repaint();
@@ -119,15 +120,13 @@ public class App extends JFrame
 		
 		JRadioButton minimap2MappingRadio = new JRadioButton("Minimap2 mapping");
 		minimap2MappingRadio.addActionListener((e) -> {
-			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
 			centralPanel.removeAll();
 			try {
-				minimap2MappingPanel = new Minimap2MappingPanel();
+				centralDataPanel = new Minimap2MappingPanel();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
-			centralPanel.add(minimap2MappingPanel, BorderLayout.CENTER);
+			centralPanel.add(centralDataPanel, BorderLayout.CENTER);
 			dataType = PanelType.MINIMAP2_MAPPING;
 			centralPanel.revalidate();
 			centralPanel.repaint();
@@ -141,13 +140,13 @@ public class App extends JFrame
 			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
 			centralPanel.removeAll();
 			try {
-				ramMappingPanel = new RamPanel();
+				centralDataPanel = new RamPanel();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			dataType = PanelType.RAM_MAPPING;
-			centralPanel.add(ramMappingPanel);
+			centralPanel.add(centralDataPanel);
 			centralPanel.repaint();
 			centralPanel.revalidate();
 			this.pack();
@@ -157,16 +156,14 @@ public class App extends JFrame
 		
 		JRadioButton ravenRadio = new JRadioButton("Raven");
 		ravenRadio.addActionListener((e) -> {
-			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
 			centralPanel.removeAll();
 			try {
-				ravenPanel = new RavenPanel();
+				centralDataPanel = new RavenPanel();
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			dataType = PanelType.RAVEN;
-			centralPanel.add(ravenPanel);
+			centralPanel.add(centralDataPanel);
 			centralPanel.repaint();
 			centralPanel.revalidate();
 			this.pack();
@@ -192,8 +189,11 @@ public class App extends JFrame
 		
 		JMenuItem aboutRam = new JMenuItem("About Ram");
 		
+		JMenuItem aboutRaven = new JMenuItem("About Raven");
+		
 		helpMenu.add(aboutMinimap2);
 		helpMenu.add(aboutRam);
+		helpMenu.add(aboutRaven);
 		
 		menuBar.add(helpMenu);
 		
@@ -208,21 +208,27 @@ public class App extends JFrame
 	    JButton buttonRun = new JButton("Run");
 	    //buttonRun.setAction(new RunAction(dataType));
 	    buttonRun.addActionListener((e) -> {
-	    	if (dataType == PanelType.RAM_MAPPING) {
-				new RamExecution(ramMappingPanel).execute();;
-			} else if (dataType == PanelType.MINIMAP2_INDEXING) {
-				//MmIndexingExecution minimap2Indexing = new MmIndexingExecution();
-			}
+	    	if (dataType == PanelType.RAM_MAPPING) 
+				new RamExecution((RamPanel) centralDataPanel).execute();
+			else if (dataType == PanelType.MINIMAP2_ALIGN)
+				new Minimap2AlignExecution((Minimap2AlignPanel) centralDataPanel).execute();
+			else if (dataType == PanelType.MINIMAP2_MAPPING)
+				new Minimap2MappingExecution((Minimap2MappingPanel) centralDataPanel).execute();
+			else if (dataType == PanelType.RAVEN)
+				new RavenExecution((RavenPanel) centralDataPanel).execute();
 	    });
 	    buttonsGridPanel.add(buttonRun);
 
 	    JButton buttonDelete = new JButton("Delete");
 	    buttonDelete.addActionListener((e) -> {
-	    	if (dataType == PanelType.RAM_MAPPING) {
-	    		ramMappingPanel.clearFields();
-	    	} else if (dataType == PanelType.MINIMAP2_INDEXING) {
-	    		minimap2IndexingPanel.clearFields();
-	    	}
+	    	if (dataType == PanelType.RAM_MAPPING) 
+	    		((RamPanel) centralDataPanel).clearFields();
+	    	else if (dataType == PanelType.MINIMAP2_ALIGN) 
+	    		((Minimap2AlignPanel) centralDataPanel).clearFields();
+	    	else if (dataType == PanelType.MINIMAP2_MAPPING)
+	    		((Minimap2MappingPanel) centralDataPanel).clearFields();
+	    	else if (dataType == PanelType.RAVEN)
+	    		((RavenPanel) centralDataPanel).clearFields();
 	    });
 	    buttonsGridPanel.add(buttonDelete);
 	    

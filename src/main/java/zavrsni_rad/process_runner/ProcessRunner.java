@@ -3,6 +3,7 @@ package zavrsni_rad.process_runner;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class ProcessRunner {
 	
@@ -18,28 +20,32 @@ public class ProcessRunner {
 	}
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
-		
-		System.out.println("Ovdje ne printa ništa čini se");
-		
+				
 		String type = args[args.length - 1];
 		System.out.println("Running " + type + "...");
 		
-		File allProcessLog = new File("all_process.log");
+		Files.createDirectory(new File("all_processes").toPath());
+		Files.createDirectory(new File("output_files").toPath());
+		Files.createDirectory(new File("processes_streams").toPath());
+		
+		File allProcessLog = new File("all_processes/all_process.log");
 		allProcessLog.createNewFile();
 		//System.exit(1);
 		
 		String refFile = args[args.length - 3];
 		String querysFiles = args[args.length - 2];
 		String ext = "";
-		if (type.equals("MINIMAP2_MAPPING") || type.equals("RAM_MAPPING") || type.equals("RAVEN"))
+		if (type.equals("MINIMAP2_MAPPING") || type.equals("RAM_MAPPING"))
 			ext = ".paf";
 		else if (type.equals("MINIMAP2_ALIGN"))
 			ext = ".sam";
+		else if (type.equals("RAVEN"))
+			ext = ".fasta";
 		
 		
 		int index = 1;
 		String fileName = type + "_" + Integer.toString(index) + ext;
-		File outputFile = new File(fileName);
+		File outputFile = new File("output_files/" + fileName);
 		if (outputFile.exists()) {
 			while(true) {
 				index++;
@@ -57,7 +63,7 @@ public class ProcessRunner {
 			commands.add(args[i]);
 		
 		ProcessBuilder pb = new ProcessBuilder(commands);
-		File errorFile = new File(fileName.substring(0, fileName.length() - 4) + "_stream.log");
+		File errorFile = new File("processes_streams/" + fileName.substring(0, fileName.length() - ext.length()) + "_stream.log");
 		errorFile.createNewFile();
 		pb.redirectError(errorFile);
 		pb.redirectOutput(outputFile);
@@ -83,13 +89,15 @@ public class ProcessRunner {
 		
 		Files.write(allProcessLog.toPath(), fileContent);
 		
-		System.out.println("Doso je do ovdje");
-		JOptionPane.showMessageDialog(new JFrame(), "Process running.", 
-				"Dialog", JOptionPane.INFORMATION_MESSAGE);
-		System.out.println("Doso je do ovdje 2");
-		int status = process.waitFor();
+		SwingUtilities.invokeLater(() -> {
+			JOptionPane.showMessageDialog(new JFrame(), "Process running.", 
+								"", JOptionPane.INFORMATION_MESSAGE);
+		});
+				
+		System.out.println("Process runnig...");
 		
-		System.out.println("Procces je zavrsio");
+		int status = process.waitFor();
+		System.out.println("Procces finished");
 		String timeStampFinish = new SimpleDateFormat("dd.MM.yyyy. HH:mm:ss").format(new Date());
 		
 		System.out.println("Output file path: " + outputFile.getAbsolutePath().toString());
@@ -99,7 +107,7 @@ public class ProcessRunner {
 			String line = fileContent.get(i);
 			String[] content = line.split(" : ");
 			if (Integer.parseInt(content[0]) == id) {
-				System.out.println("Pronaden id");
+				System.out.println("Found id");
 				content[4] = timeStampFinish;
 				if (status == 0)
 					content[6] = ProcessStates.FINNISHED.toString();
@@ -113,11 +121,15 @@ public class ProcessRunner {
 		Files.write(allProcessLog.toPath(), fileContent);			
 		
 		if (status == 0)
-			JOptionPane.showMessageDialog(new JFrame(), "Process finished.", 
-						"Dialog", JOptionPane.INFORMATION_MESSAGE);
+			SwingUtilities.invokeLater(() -> {
+				JOptionPane.showMessageDialog(new JFrame(), "Process finished.", 
+						"", JOptionPane.INFORMATION_MESSAGE);
+			});
 		else 
-			JOptionPane.showMessageDialog(new JFrame(), "Process failed.", 
-					"Dialog", JOptionPane.ERROR_MESSAGE);
+			SwingUtilities.invokeLater(() -> {
+				JOptionPane.showMessageDialog(new JFrame(), "Process failed.", 
+						"", JOptionPane.ERROR_MESSAGE);
+			});
 		
 	}
 

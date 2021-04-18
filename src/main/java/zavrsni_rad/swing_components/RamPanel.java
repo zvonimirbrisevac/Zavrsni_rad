@@ -204,14 +204,12 @@ public class RamPanel extends JPanel {
 		return targetPath.getText();
 	}
 
-	public String[] getSequencesPath() {
+	public String getSequencesPath() {
 		if (sequencesPath.getText().equals("")) {
 			JOptionPane.showMessageDialog(this, "No sequences paths!", "Dialog", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
-		String[] files = sequencesPath.getText().split(";");
-	
-		return files;
+		return sequencesPath.getText();
 	}
 
 	public String getPafPath() {
@@ -236,5 +234,7 @@ public class RamPanel extends JPanel {
 	
 		threadsField.setText("");
 	}
+
+	
 
 }

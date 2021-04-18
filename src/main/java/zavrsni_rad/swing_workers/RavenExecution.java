@@ -4,30 +4,33 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
 import zavrsni_rad.main_app.App;
-import zavrsni_rad.swing_components.RamPanel;
+import zavrsni_rad.swing_components.RavenPanel;
 
-public class RamExecution extends SwingWorker<Void, Void>{
+public class RavenExecution extends SwingWorker<Integer, Integer>{
 	
-	private RamPanel panel;
+	private RavenPanel panel;
 	
-	public RamExecution(RamPanel panel) {
+	public RavenExecution(RavenPanel panel) {
 		super();
 		this.panel = panel;
 		
 	}
 	
 	@Override
-	protected Void doInBackground() throws Exception {
+	protected Integer doInBackground() throws Exception {
+		
 		ArrayList<String> commands = new ArrayList<String>();
+		
 		commands.add("java");
 		commands.add("../process_runner/ProcessRunner.java");
 		
-		String ramPath = panel.getRamPath();
-		if (!ramPath.equals(""))
-			commands.add(ramPath);
+		String ravenPath = panel.getRavenPath();
+		if (!ravenPath.equals(""))
+			commands.add(ravenPath);
 		else
 			return null;
 		
@@ -40,12 +43,6 @@ public class RamExecution extends SwingWorker<Void, Void>{
 		}
 		
 		
-		String targetPath = panel.getTargetPath();
-		if (!targetPath.equals(""))
-			commands.add(targetPath);
-		else
-			return null;
-		
 		String seqPaths = panel.getSequencesPath();
 		if (seqPaths != null)
 			for(String s: seqPaths.split(";"))
@@ -53,7 +50,7 @@ public class RamExecution extends SwingWorker<Void, Void>{
 		else
 			return null;
 		
-		commands.add(App.PanelType.RAM_MAPPING.toString());
+		commands.add(App.PanelType.RAVEN.toString());
 		
 		for (String s : commands)
 			System.out.print(s + " ");
@@ -61,7 +58,7 @@ public class RamExecution extends SwingWorker<Void, Void>{
 		
 		ProcessBuilder pb = new ProcessBuilder(commands);
 		Process process = pb.start();
-		
+		System.out.println("Calling ProcessRunner...");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 		StringBuilder builder = new StringBuilder();
 		String line = null;
@@ -73,4 +70,5 @@ public class RamExecution extends SwingWorker<Void, Void>{
 		
 		return null;
 	}
+	
 }
