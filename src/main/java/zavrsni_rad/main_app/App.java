@@ -3,10 +3,12 @@ package zavrsni_rad.main_app;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,12 +18,17 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import zavrsni_rad.swing_components.DataPanelMinimap2Align;
-import zavrsni_rad.swing_components.DataPanelMinimap2Index;
-import zavrsni_rad.swing_components.DataPanelRam;
+import zavrsni_rad.swing_components.Minimap2AlignPanel;
+import zavrsni_rad.swing_components.Minimap2IndexPanel;
+import zavrsni_rad.swing_components.RamPanel;
+import zavrsni_rad.swing_components.Minimap2MappingPanel;
+import zavrsni_rad.swing_components.RavenPanel;
+import zavrsni_rad.swing_workers.RamExecution;
 
 /**
  * Hello world!
@@ -31,14 +38,16 @@ public class App extends JFrame
 {
 	
 	private JPanel centralPanel;
-	private DataPanelRam ramMappingPanel;
-	private DataPanelMinimap2Index minimap2IndexingPanel;
-	private DataPanelMinimap2Align minimap2AlignPanel;
+	private RamPanel ramMappingPanel;
+	private Minimap2IndexPanel minimap2IndexingPanel;
+	private Minimap2AlignPanel minimap2AlignPanel;
+	private Minimap2MappingPanel minimap2MappingPanel;
+	private RavenPanel ravenPanel;
 	private PanelType dataType;
 	
 	
 	enum PanelType {
-		RAM_MAPPING, MINIMAP2_MAPPING, MINIMAP2_INDEXING, MINIMAP2_ALIGN;
+		RAM_MAPPING, MINIMAP2_MAPPING, MINIMAP2_INDEXING, MINIMAP2_ALIGN, RAVEN;
 	}
 	
 	public App() {
@@ -70,50 +79,69 @@ public class App extends JFrame
 		
 		ButtonGroup tools = new ButtonGroup();
 		
-		JRadioButton minimap2IndRadio = new JRadioButton("Minmap2 indexing");
+		JRadioButton minimap2IndRadio = new JRadioButton("Minimap2 indexing");
 		minimap2IndRadio.addActionListener((e) -> {
 			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
 			centralPanel.removeAll();
 			try {
-				minimap2IndexingPanel = new DataPanelMinimap2Index();
+				minimap2IndexingPanel = new Minimap2IndexPanel();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			centralPanel.add(minimap2IndexingPanel, BorderLayout.CENTER);
 			dataType = PanelType.MINIMAP2_INDEXING;
-			centralPanel.add(minimap2IndexingPanel);
-			centralPanel.repaint();
 			centralPanel.revalidate();
+			centralPanel.repaint();
 			this.pack();
 			
 		});
 		tools.add(minimap2IndRadio);
 		
-		JRadioButton minimap2AlignRadio = new JRadioButton("Minmap2 alignment");
+		JRadioButton minimap2AlignRadio = new JRadioButton("Minimap2 alignment");
 		minimap2AlignRadio.addActionListener((e) -> {
 			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
 			centralPanel.removeAll();
 			try {
-				minimap2AlignPanel = new DataPanelMinimap2Align();
+				minimap2AlignPanel = new Minimap2AlignPanel();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			centralPanel.add(minimap2AlignPanel, BorderLayout.CENTER);
 			dataType = PanelType.MINIMAP2_ALIGN;
-			centralPanel.add(minimap2AlignPanel);
-			centralPanel.repaint();
 			centralPanel.revalidate();
+			centralPanel.repaint();
 			this.pack();
 			
 		});
 		tools.add(minimap2AlignRadio);
+		
+		JRadioButton minimap2MappingRadio = new JRadioButton("Minimap2 mapping");
+		minimap2MappingRadio.addActionListener((e) -> {
+			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
+			centralPanel.removeAll();
+			try {
+				minimap2MappingPanel = new Minimap2MappingPanel();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			centralPanel.add(minimap2MappingPanel, BorderLayout.CENTER);
+			dataType = PanelType.MINIMAP2_MAPPING;
+			centralPanel.revalidate();
+			centralPanel.repaint();
+			this.pack();
+			
+		});
+		tools.add(minimap2MappingRadio);
 		
 		JRadioButton ramRadio = new JRadioButton("Ram");
 		ramRadio.addActionListener((e) -> {
 			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
 			centralPanel.removeAll();
 			try {
-				ramMappingPanel = new DataPanelRam();
+				ramMappingPanel = new RamPanel();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -126,12 +154,36 @@ public class App extends JFrame
 			
 		});
 		tools.add(ramRadio);
-		ramRadio.doClick();
+		
+		JRadioButton ravenRadio = new JRadioButton("Raven");
+		ravenRadio.addActionListener((e) -> {
+			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
+			centralPanel.removeAll();
+			try {
+				ravenPanel = new RavenPanel();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			dataType = PanelType.RAVEN;
+			centralPanel.add(ravenPanel);
+			centralPanel.repaint();
+			centralPanel.revalidate();
+			this.pack();
+			
+		});
+		tools.add(ravenRadio);
+		
 		
 		toolsMenu.add(minimap2IndRadio);
 		toolsMenu.add(minimap2AlignRadio);
+		toolsMenu.add(minimap2MappingRadio);
+		toolsMenu.add(new JSeparator(SwingConstants.HORIZONTAL));
 		toolsMenu.add(ramRadio);
+		toolsMenu.add(new JSeparator(SwingConstants.HORIZONTAL));
+		toolsMenu.add(ravenRadio);
 		
+		minimap2AlignRadio.doClick();
 		menuBar.add(toolsMenu);
 		
 		JMenu helpMenu = new JMenu("Help");
@@ -157,9 +209,9 @@ public class App extends JFrame
 	    //buttonRun.setAction(new RunAction(dataType));
 	    buttonRun.addActionListener((e) -> {
 	    	if (dataType == PanelType.RAM_MAPPING) {
-				RamMappingExecution ramMap = new RamMappingExecution();
+				new RamExecution(ramMappingPanel).execute();;
 			} else if (dataType == PanelType.MINIMAP2_INDEXING) {
-				MmIndexingExecution minimap2Indexing = new MmIndexingExecution();
+				//MmIndexingExecution minimap2Indexing = new MmIndexingExecution();
 			}
 	    });
 	    buttonsGridPanel.add(buttonRun);
@@ -195,7 +247,7 @@ public class App extends JFrame
 	}*/
 	
 	
-	private class RamMappingExecution extends SwingWorker<Integer, Integer> {
+	/*private class RamMappingExecution extends SwingWorker<Integer, Integer> {
 		
 		public RamMappingExecution() {
 			super();
@@ -322,7 +374,7 @@ public class App extends JFrame
 			} else {
 				JOptionPane.showMessageDialog(new JFrame(), "Mapping failed.", 
 						"Dialog", JOptionPane.ERROR_MESSAGE);
-			}*/
+			}
 			
 			
 			return null;
@@ -410,7 +462,7 @@ public class App extends JFrame
 
 		
 		}
-	}
+	}*/ 
 	
 	
     public static void main( String[] args )

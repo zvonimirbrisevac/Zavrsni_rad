@@ -10,6 +10,7 @@ import java.text.NumberFormat;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -23,41 +24,39 @@ import javax.swing.text.NumberFormatter;
 
 import zavrsni_rad.swing_layouts.SpringUtilities;
 
-public class DataPanelMinimap2Align extends JPanel {
+public class Minimap2AlignPanel extends JPanel {
 	
 	private JPanel filesPanel;
 	private JPanel refPanel;
 	private JPanel queryPanel;
-	private JPanel indexOptionalPanel;
+	private Minimap2IndexingOptPanel indexOptionalPanel;
 	private JPanel samPanel;
-	private PanelAlignOptional alignOptionalPanel;
-	private DisabledPanel disPanel;
+	private Minimap2AlignOptPanel alignOptionalPanel;
 	private JTextField minimap2Path;
 	private JTextField refPath;
 	private JTextField queryPath;
 	private JTextField samPath;
-	private JFormattedTextField kmerField;
-	private JFormattedTextField windowField;
-	private JFormattedTextField splitField;
-	private JCheckBox homoKmer;
+	private JFormattedTextField threadsField;
+	private JComboBox<String> presetBox;
+	private JCheckBox cigarBox;
+	
 		
-	public DataPanelMinimap2Align() throws IOException {
+	public Minimap2AlignPanel() throws IOException {
 		super();
 		
 		filesPanel = new JPanel(new SpringLayout());
 
 		JLabel pleaseCheck = new JLabel("Path to your minimap2.exe:", SwingConstants.LEFT);
-		filesPanel.add(pleaseCheck);
 
 		minimap2Path = new JTextField(16);
 		minimap2Path.setText(fetchMinimap2Path());
 
-		JButton chooseRamFileButton = new JButton("Choose file");
-		chooseRamFileButton.addActionListener((e) -> {
+		JButton chooseMinimap2FileButton = new JButton("Choose file");
+		chooseMinimap2FileButton.addActionListener((e) -> {
 			JFileChooser fileChooser = null;
 			try {
 				fileChooser = new JFileChooser(fetchMinimap2Path());
-				int returnValue = fileChooser.showOpenDialog(DataPanelMinimap2Align.this);
+				int returnValue = fileChooser.showOpenDialog(Minimap2AlignPanel.this);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					minimap2Path.setText(file.toPath().toString());
@@ -69,16 +68,20 @@ public class DataPanelMinimap2Align extends JPanel {
 
 		});
 
-		JPanel checkRam = new JPanel();
-		checkRam.add(minimap2Path);
-		checkRam.add(chooseRamFileButton);
+		//JPanel checkMinimap2 = new JPanel();
+		//checkMinimap2.add(minimap2Path);
+		//checkMinimap2.add(chooseMinimap2FileButton);
 
-		filesPanel.add(checkRam);
-
+		//filesPanel.add(checkMinimap2);
+		filesPanel.add(pleaseCheck);
+		filesPanel.add(minimap2Path);
+		filesPanel.add(chooseMinimap2FileButton);
+		
+		
 		JLabel refLabel = new JLabel("Reference file:", SwingConstants.LEFT);
 		// filesPanel.add(refLabel);
 
-		refPanel = new JPanel();
+		//refPanel = new JPanel();
 
 		refPath = new JTextField(16);
 
@@ -86,34 +89,35 @@ public class DataPanelMinimap2Align extends JPanel {
 		chooseRefButton.addActionListener((e) -> {
 			JFileChooser fileChooser = null;
 			fileChooser = new JFileChooser();
-			int returnValue = fileChooser.showOpenDialog(DataPanelMinimap2Align.this);
+			int returnValue = fileChooser.showOpenDialog(Minimap2AlignPanel.this);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
 				refPath.setText(file.toPath().toString());
 			}
-			if (refPath.getText().endsWith(".mmi"))
+			/*if (refPath.getText().endsWith(".mmi"))
 				disPanel.setEnabled(false);
 			else
-				disPanel.setEnabled(true);
+				disPanel.setEnabled(true);*/
 		});
 
-		refPanel.add(refPath);
-		refPanel.add(chooseRefButton);
+		//refPanel.add(refPath);
+		//refPanel.add(chooseRefButton);
 
 		filesPanel.add(refLabel);
-		filesPanel.add(refPanel);
-
+		//filesPanel.add(refPanel);
+		filesPanel.add(refPath);
+		filesPanel.add(chooseRefButton);
+		
 		JLabel queryLabel = new JLabel("Query file(s):", SwingConstants.LEFT);
-		filesPanel.add(queryLabel);
 
-		queryPanel = new JPanel();
+		//queryPanel = new JPanel();
 		queryPath = new JTextField(16);
 
 		JButton chooseQueryFiles = new JButton("Choose file");
 		chooseQueryFiles.addActionListener((e) -> {
 			JFileChooser fileChooser = null;
 			fileChooser = new JFileChooser();
-			int returnValue = fileChooser.showOpenDialog(DataPanelMinimap2Align.this);
+			int returnValue = fileChooser.showOpenDialog(Minimap2AlignPanel.this);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
 				if (queryPath.getText().equals(""))
@@ -122,13 +126,33 @@ public class DataPanelMinimap2Align extends JPanel {
 					queryPath.setText(queryPath.getText() + ";" + file.toPath().toString());
 			}
 		});
+		
+		filesPanel.add(queryLabel);
+		filesPanel.add(queryPath);
+		filesPanel.add(chooseQueryFiles);
 
-		queryPanel.add(queryPath);
-		queryPanel.add(chooseQueryFiles);
+		//filesPanel.add(queryPanel);
 
-		filesPanel.add(queryPanel);
+		
+		JLabel threadsLabel = new JLabel("Number of threads (optional):", SwingConstants.LEFT);
 
-		JLabel samLabel = new JLabel("SAM file:", SwingConstants.LEFT);
+		NumberFormat threadsFormat = NumberFormat.getInstance();
+		NumberFormatter threadsFormatter = new NumberFormatter(threadsFormat);
+		threadsFormatter.setValueClass(Integer.class);
+		threadsFormatter.setMinimum(0);
+		threadsFormatter.setMaximum(Integer.MAX_VALUE);
+		//threadsFormatter.setAllowsInvalid(false);
+		// threadsFormatter.setCommitsOnValidEdit(true);
+		threadsField = new JFormattedTextField(threadsFormatter);
+		threadsField.setColumns(16);
+		
+		filesPanel.add(threadsLabel);
+		
+		filesPanel.add(threadsField);
+		
+		filesPanel.add(new JPanel());
+		
+		/*JLabel samLabel = new JLabel("SAM file:", SwingConstants.LEFT);
 
 		filesPanel.add(samLabel);
 
@@ -139,7 +163,7 @@ public class DataPanelMinimap2Align extends JPanel {
 		samFile.addActionListener((e) -> {
 			JFileChooser fileChooser = null;
 			fileChooser = new JFileChooser();
-			int returnValue = fileChooser.showOpenDialog(DataPanelMinimap2Align.this);
+			int returnValue = fileChooser.showOpenDialog(Minimap2AlignPanel.this);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
 				samPath.setText(file.toPath().toString());
@@ -149,72 +173,40 @@ public class DataPanelMinimap2Align extends JPanel {
 		samPanel.add(samPath);
 		samPanel.add(samFile);
 
-		filesPanel.add(samPanel);
-
-		SpringUtilities.makeCompactGrid(filesPanel, 4, 2, 0, 0, 10, 10);
+		filesPanel.add(samPanel);*/
+		
+		JLabel presetLabel = new JLabel("Choose preset option (optional):", SwingConstants.LEFT);
+		
+		String[] presetOptions = {"", "PacBio vs reference mapping", "Nanopore vs reference mapping", "asm-to-ref mapping (~0.1% sequence divergence)",
+									"asm-to-ref mapping (~1% sequence divergence)", "asm-to-ref mapping (~5% sequence divergence)", "long-read splice alignment",
+									"PacBio-CCS spliced alignment", "Genomic short-read mapping"};
+		presetBox = new JComboBox<String>(presetOptions);
+		
+		filesPanel.add(presetLabel);
+		filesPanel.add(presetBox);
+		filesPanel.add(new JPanel());
+		
+		
+		cigarBox = new JCheckBox("Generate cigar string");
+		
+		filesPanel.add(cigarBox);
+		filesPanel.add(new JPanel());
+		filesPanel.add(new JPanel());
+		
+		
+		SpringUtilities.makeCompactGrid(filesPanel, 6, 3, 0, 0, 10, 10);
 		add(filesPanel);
 		
-		indexOptionalPanel = new JPanel(new SpringLayout());
-		indexOptionalPanel.setBorder(
-				BorderFactory.createTitledBorder(null, "Indexing optional arguments", TitledBorder.LEADING, TitledBorder.TOP));
-		indexOptionalPanel.setLayout(new SpringLayout());
+		/*indexOptionalPanel = new Minimap2AlignOptPanel();
+		this.add(indexOptionalPanel);
 		
-		JLabel kmerLabel = new JLabel("Kmer length:", SwingConstants.LEFT);
-		indexOptionalPanel.add(kmerLabel);
+		alignOptionalPanel =new Minimap2AlignOptPanel();
+		this.add(alignOptionalPanel);*/
+		
 
-		NumberFormat kmerFormat = NumberFormat.getInstance();
-		NumberFormatter kmerFormatter = new NumberFormatter(kmerFormat);
-		kmerFormatter.setValueClass(Integer.class);
-		kmerFormatter.setMinimum(0);
-		kmerFormatter.setMaximum(Integer.MAX_VALUE);
-		//kmerFormatter.setAllowsInvalid(false);
-		// kmerFormatter.setCoitsOnValidEdit(true);
-		kmerField = new JFormattedTextField(kmerFormatter);
-		kmerField.setColumns(16);
-		indexOptionalPanel.add(kmerField);
-
-		JLabel windowLabel = new JLabel("Window length:", SwingConstants.LEFT);
-		indexOptionalPanel.add(windowLabel);
-
-		NumberFormat windowFormat = NumberFormat.getInstance();
-		NumberFormatter windowFormatter = new NumberFormatter(windowFormat);
-		windowFormatter.setValueClass(Integer.class);
-		windowFormatter.setMinimum(0);
-		windowFormatter.setMaximum(Integer.MAX_VALUE);
-		//windowFormatter.setAllowsInvalid(false);
-		// windowFormatter.setCoitsOnValidEdit(true);
-		windowField = new JFormattedTextField(windowFormatter);
-		windowField.setColumns(16);
-		indexOptionalPanel.add(windowField);
-		
-		JLabel splitLabel = new JLabel("Split index:", SwingConstants.LEFT);
-		indexOptionalPanel.add(splitLabel);
-		
-		NumberFormat splitFormat = NumberFormat.getInstance();
-		NumberFormatter splitFormatter = new NumberFormatter(splitFormat);
-		splitFormatter.setValueClass(Integer.class);
-		splitFormatter.setMinimum(0);
-		splitFormatter.setMaximum(Integer.MAX_VALUE);
-		//splitFormatter.setAllowsInvalid(false);
-		// windowFormatter.setCoitsOnValidEdit(true);
-		splitField = new JFormattedTextField(splitFormatter);
-		splitField.setColumns(16);
-		indexOptionalPanel.add(splitField);
-		
-		homoKmer = new JCheckBox("Use homopolymer-compressed k-mer");
-		indexOptionalPanel.add(homoKmer);
-		
-		indexOptionalPanel.add(new JPanel());
-		
-		SpringUtilities.makeCompactGrid(indexOptionalPanel, 4, 2, 0, 0, 10, 10);
-		
-		disPanel = new DisabledPanel(indexOptionalPanel);
-		add(disPanel);
-		
-		alignOptionalPanel = new PanelAlignOptional();
-		add(alignOptionalPanel);
 		
 	}
+	
 	
 	
 	public String fetchMinimap2Path() throws IOException {
@@ -253,21 +245,7 @@ public class DataPanelMinimap2Align extends JPanel {
 		return files;
 	}
 	
-	public int getKmerField() {
-		return getIntValueFromField(kmerField, "kmer length");
-	}
-
-	public int getWindowField() {
-		return getIntValueFromField(windowField, "window length");
-	}
 	
-	public int getSplitField() {
-		return getIntValueFromField(splitField, "split index");
-	}
-	
-	public boolean getHomoKmer() {
-		return homoKmer.isSelected();
-	}
 	
 	public int getIntValueFromField(JFormattedTextField field, String dataType) {
 		String s = field.getText();
@@ -288,9 +266,6 @@ public class DataPanelMinimap2Align extends JPanel {
 	public void clearFields() {
 		refPath.setText("");
 		queryPath.setText("");
-		splitField.setText("");
-		kmerField.setText("");
-		windowField.setText("");
-		homoKmer.setSelected(false);
+		
 	}
 }

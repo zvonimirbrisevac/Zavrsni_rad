@@ -16,7 +16,7 @@ import javax.swing.text.NumberFormatter;
 
 import zavrsni_rad.swing_layouts.SpringUtilities;
 
-public class PanelAlignOptional extends JPanel {
+public class Minimap2AlignOptPanel extends JPanel {
 	
 	private JFormattedTextField zDropField;
 	private JFormattedTextField zDropInvField;
@@ -28,7 +28,7 @@ public class PanelAlignOptional extends JPanel {
 	private JCheckBox cigar;
 	private JComboBox<String> wayFindGTAG;
 	
-	public PanelAlignOptional() {
+	public  Minimap2AlignOptPanel() {
 		this.setBorder(
 				BorderFactory.createTitledBorder(null, "Alignment optional arguments", TitledBorder.LEADING, TitledBorder.TOP));
 		this.setLayout(new SpringLayout());
