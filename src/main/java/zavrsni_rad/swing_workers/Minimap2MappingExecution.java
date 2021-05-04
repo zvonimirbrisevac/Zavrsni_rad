@@ -23,7 +23,7 @@ public class Minimap2MappingExecution extends SwingWorker<Void, Void>{
 	protected Void doInBackground() throws Exception {
 		ArrayList<String> commands = new ArrayList<String>();
 		commands.add("java");
-		commands.add("../process_runner/ProcessRunner.java");
+		commands.add("./src/main/java/zavrsni_rad/process_runner/ProcessRunner.java");
 		
 		String minimap2Path = panel.getMinimap2Path();
 		if (!minimap2Path.equals(""))
@@ -59,7 +59,7 @@ public class Minimap2MappingExecution extends SwingWorker<Void, Void>{
 		else
 			return null;
 		
-		commands.add(App.PanelType.MINIMAP2_ALIGN.toString());
+		commands.add(App.PanelType.MINIMAP2_MAPPING.toString());
 		
 		for (String s : commands)
 			System.out.print(s + " ");

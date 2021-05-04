@@ -209,13 +209,13 @@ public class App extends JFrame
 	    //buttonRun.setAction(new RunAction(dataType));
 	    buttonRun.addActionListener((e) -> {
 	    	if (dataType == PanelType.RAM_MAPPING) 
-				new RamExecution((RamPanel) centralDataPanel).execute();
+				new RamExecution((RamPanel)centralDataPanel).execute();
 			else if (dataType == PanelType.MINIMAP2_ALIGN)
-				new Minimap2AlignExecution((Minimap2AlignPanel) centralDataPanel).execute();
+				new Minimap2AlignExecution((Minimap2AlignPanel)centralDataPanel).execute();
 			else if (dataType == PanelType.MINIMAP2_MAPPING)
-				new Minimap2MappingExecution((Minimap2MappingPanel) centralDataPanel).execute();
+				new Minimap2MappingExecution((Minimap2MappingPanel)centralDataPanel).execute();
 			else if (dataType == PanelType.RAVEN)
-				new RavenExecution((RavenPanel) centralDataPanel).execute();
+				new RavenExecution((RavenPanel)centralDataPanel).execute();
 	    });
 	    buttonsGridPanel.add(buttonRun);
 
@@ -253,141 +253,11 @@ public class App extends JFrame
 	}*/
 	
 	
-	/*private class RamMappingExecution extends SwingWorker<Integer, Integer> {
+	
+			
+			
 		
-		public RamMappingExecution() {
-			super();
-			
-			try {
-				doInBackground();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		@Override
-		protected Integer doInBackground() throws Exception {
-			ArrayList<String> commands = new ArrayList<String>();
-			
-			String ramPath = ramMappingPanel.getRamPath();
-			if (!ramPath.equals(""))
-				commands.add(ramPath);
-			else
-				return null;
-			
-			String targetPath = ramMappingPanel.getTargetPath();
-			if (!targetPath.equals(""))
-				commands.add(targetPath);
-			else
-				return null;
-			
-			String[] seqPaths = ramMappingPanel.getSequencesPath();
-			if (seqPaths != null)
-				for(String s: seqPaths)
-					commands.add(s);
-			else
-				return null;
-			
-			int bandWidth = ramMappingPanel.getBandField();
-			if (bandWidth == -2) 
-				return null;
-			else if (bandWidth >= 0) { 
-				commands.add("--bandwidth");
-				commands.add(Integer.toString(bandWidth));
-			}
-			
-			int chain = ramMappingPanel.getChainField();
-			if (chain == -2) 
-				return null;
-			else if (chain >= 0) {
-				commands.add("--chain");
-				commands.add(Integer.toString(chain));
-			}
-			
-			double freq = ramMappingPanel.getFreqField();
-			if (freq == -2.0) 
-				return null;
-			else if (freq >= 0) {
-				commands.add("-f");
-				commands.add(Double.toString(freq));
-			}
-				
-			int gap = ramMappingPanel.getGapField();
-			if (gap == -2) 
-				return null;
-			else if (gap >= 0) { 
-				commands.add("--gap");
-				commands.add(Integer.toString(gap));
-			}
-			
-			int kmer = ramMappingPanel.getKmerField();
-			if (kmer == -2) 
-				return null;
-			else if (kmer >= 0) {
-				commands.add("-k");
-				commands.add(Integer.toString(kmer));
-			}
-			
-			int matches = ramMappingPanel.getMatchesField();
-			if (matches == -2) 
-				return null;
-			else if (matches >= 0) {
-				commands.add("--matches");
-				commands.add(Integer.toString(matches));
-			}
-				
-			int window = ramMappingPanel.getWindowField();
-			if (window == -2) 
-				return null;
-			else if (window >= 0) {
-				commands.add("-w");
-				commands.add(Integer.toString(window));
-			}
-				
-			int threads = ramMappingPanel.getThreadsField();
-			if (threads == -2) 
-				return null;
-			else if (threads >= 0) {
-				commands.add("-t");
-				commands.add(Integer.toString(threads));
-			}
-			
-			if (ramMappingPanel.getMinhash())
-				commands.add("--minhash");
-			
-			String pafPath = ramMappingPanel.getPafPath();
-			if (pafPath.equals(""))
-				return null;
-			
-			System.out.print("Running cominimap2and: ");
-			for (String s : commands)
-				System.out.print(s + " ");
-			
-			
-			ProcessBuilder pb = new ProcessBuilder(commands);
-			File errorFile = new File(pafPath.substring(0, pafPath.length() - 4) + "_stream.log");
-			errorFile.createNewFile();
-			pb.redirectError(errorFile);
-			pb.redirectOutput(new File(pafPath));
-			Process process = pb.start();
-			JOptionPane.showMessageDialog(new JFrame(), "Mapping running.", 
-					"Dialog", JOptionPane.INFORMATION_MESSAGE);
-			/*int status = process.waitFor();
-			if (status == 0) {
-				JOptionPane.showMessageDialog(new JFrame(), "Mapping done.", 
-						"Dialog", JOptionPane.INFORMATION_MESSAGE);
-			} else {
-				JOptionPane.showMessageDialog(new JFrame(), "Mapping failed.", 
-						"Dialog", JOptionPane.ERROR_MESSAGE);
-			}
-			
-			
-			return null;
-		}
-	}
-		
-	private class MmIndexingExecution extends SwingWorker<Integer, Integer> {
+	/*private class MmIndexingExecution extends SwingWorker<Integer, Integer> {
 			
 		public MmIndexingExecution() {
 			super();

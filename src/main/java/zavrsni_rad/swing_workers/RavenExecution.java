@@ -26,7 +26,7 @@ public class RavenExecution extends SwingWorker<Integer, Integer>{
 		ArrayList<String> commands = new ArrayList<String>();
 		
 		commands.add("java");
-		commands.add("../process_runner/ProcessRunner.java");
+		commands.add("./src/main/java/zavrsni_rad/process_runner/ProcessRunner.java");
 		
 		String ravenPath = panel.getRavenPath();
 		if (!ravenPath.equals(""))

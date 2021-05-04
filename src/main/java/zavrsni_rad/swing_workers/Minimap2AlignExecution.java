@@ -23,7 +23,7 @@ public class Minimap2AlignExecution extends SwingWorker<Integer, Integer> {
 	protected Integer doInBackground() throws Exception {
 		ArrayList<String> commands = new ArrayList<String>();
 		commands.add("java");
-		commands.add("/home/zvonimir/Desktop/zavrsni/Zavrsni_rad/src/main/java/zavrsni_rad/process_runner/ProcessRunner.java");
+		commands.add("./src/main/java/zavrsni_rad/process_runner/ProcessRunner.java");
 		
 		String minimap2Path = panel.getMinimap2Path();
 		if (!minimap2Path.equals(""))
@@ -80,7 +80,7 @@ public class Minimap2AlignExecution extends SwingWorker<Integer, Integer> {
 			System.out.println(line);
 		}
 		
-		System.out.println(process.waitFor());
+		//System.out.println(">>>>Rezultat executora: " + process.waitFor());
 		
 		return null;
 	}

@@ -22,16 +22,18 @@ public class ProcessRunner {
 	public static void main(String[] args) throws IOException, InterruptedException {
 				
 		String type = args[args.length - 1];
+		System.out.println();
 		System.out.println("Running " + type + "...");
 		
-		Files.createDirectory(new File("all_processes").toPath());
-		Files.createDirectory(new File("output_files").toPath());
-		Files.createDirectory(new File("processes_streams").toPath());
+		Files.createDirectories(new File("all_processes").toPath());
+		//System.out.println(">>>>Stvorio je all_processes");
+		Files.createDirectories(new File("output_files").toPath());
+		Files.createDirectories(new File("processes_streams").toPath());
 		
 		File allProcessLog = new File("all_processes/all_process.log");
 		allProcessLog.createNewFile();
 		//System.exit(1);
-		
+		//System.out.println(">>>>>Stvorio je datoteke<<<<<<");
 		String refFile = args[args.length - 3];
 		String querysFiles = args[args.length - 2];
 		String ext = "";
@@ -50,7 +52,7 @@ public class ProcessRunner {
 			while(true) {
 				index++;
 				fileName = type + "_" + Integer.toString(index) + ext;
-				outputFile = new File(fileName);
+				outputFile = new File("output_files/" + fileName);
 				if (!outputFile.exists()) {
 					break;
 				}
@@ -58,16 +60,21 @@ public class ProcessRunner {
 		}
 		outputFile.createNewFile();
 		
+		//System.out.println(">>>>>>Stvorio je output file<<<<<<<");
 		ArrayList<String> commands = new ArrayList<String>();
 		for (int i = 0; i < args.length - 1; i++)
 			commands.add(args[i]);
 		
+		
+		///System.out.println(">>>>>>>>>>>Ide gradit processbuilder<<<<<<<<<");
 		ProcessBuilder pb = new ProcessBuilder(commands);
 		File errorFile = new File("processes_streams/" + fileName.substring(0, fileName.length() - ext.length()) + "_stream.log");
 		errorFile.createNewFile();
 		pb.redirectError(errorFile);
 		pb.redirectOutput(outputFile);
+		//System.out.println("krece start");
 		Process process = pb.start();
+		//System.out.println("zavrsio start");
 		String timeStampStart = new SimpleDateFormat("dd.MM.yyyy. HH:mm:ss").format(new Date());
 		
 		List<String> fileContent = new ArrayList<>(Files.readAllLines(allProcessLog.toPath()));
@@ -81,6 +88,7 @@ public class ProcessRunner {
 		sb.append(Integer.toString(id) + " : ");
 		sb.append(refFile + " : ");
 		sb.append(querysFiles + " : ");
+		sb.append(outputFile.getAbsolutePath() + " : ");
 		sb.append(timeStampStart + " : ");
 		sb.append("- : ");
 		sb.append(type + " : ");
@@ -108,11 +116,11 @@ public class ProcessRunner {
 			String[] content = line.split(" : ");
 			if (Integer.parseInt(content[0]) == id) {
 				System.out.println("Found id");
-				content[4] = timeStampFinish;
+				content[5] = timeStampFinish;
 				if (status == 0)
-					content[6] = ProcessStates.FINNISHED.toString();
+					content[7] = ProcessStates.FINNISHED.toString();
 				else
-					content[6] = ProcessStates.FAILED.toString();
+					content[7] = ProcessStates.FAILED.toString();
 				fileContent.set(i, String.join(" : ", content));
 				break;
 			}

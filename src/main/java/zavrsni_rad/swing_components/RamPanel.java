@@ -230,7 +230,7 @@ public class RamPanel extends JPanel {
 	public void clearFields() {
 		targetPath.setText("");
 		sequencesPath.setText("");
-		pafPath.setText("");
+		//pafPath.setText("");
 	
 		threadsField.setText("");
 	}

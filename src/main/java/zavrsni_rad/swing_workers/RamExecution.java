@@ -23,7 +23,7 @@ public class RamExecution extends SwingWorker<Void, Void>{
 	protected Void doInBackground() throws Exception {
 		ArrayList<String> commands = new ArrayList<String>();
 		commands.add("java");
-		commands.add("../process_runner/ProcessRunner.java");
+		commands.add("./src/main/java/zavrsni_rad/process_runner/ProcessRunner.java");
 		
 		String ramPath = panel.getRamPath();
 		if (!ramPath.equals(""))

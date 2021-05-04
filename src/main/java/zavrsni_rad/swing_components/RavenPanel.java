@@ -129,6 +129,8 @@ public class RavenPanel extends JPanel {
 		
 		SpringUtilities.makeCompactGrid(filesPanel, 3, 3, 0, 0, 10, 10);
 		
+		this.add(filesPanel);
+		
 	}
 	
 	public String fetchRavenPath() throws IOException {
