@@ -22,11 +22,14 @@ import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 
 import zavrsni_rad.swing_components.Minimap2AlignPanel;
 import zavrsni_rad.swing_components.Minimap2IndexPanel;
 import zavrsni_rad.swing_components.RamPanel;
 import zavrsni_rad.swing_components.Minimap2MappingPanel;
+import zavrsni_rad.swing_components.ProcessesTable;
 import zavrsni_rad.swing_components.RavenPanel;
 import zavrsni_rad.swing_workers.Minimap2AlignExecution;
 import zavrsni_rad.swing_workers.Minimap2MappingExecution;
@@ -37,23 +40,21 @@ import zavrsni_rad.swing_workers.RavenExecution;
  * Hello world!
  *
  */
-public class App extends JFrame
-{
-	
+public class App extends JFrame {
+
 	private JPanel centralPanel;
 	private JPanel centralDataPanel;
-	/*private RamPanel ramMappingPanel;
-	private Minimap2IndexPanel minimap2IndexingPanel;
-	private Minimap2AlignPanel minimap2AlignPanel;
-	private Minimap2MappingPanel minimap2MappingPanel;
-	private RavenPanel ravenPanel;*/
+	/*
+	 * private RamPanel ramMappingPanel; private Minimap2IndexPanel
+	 * minimap2IndexingPanel; private Minimap2AlignPanel minimap2AlignPanel; private
+	 * Minimap2MappingPanel minimap2MappingPanel; private RavenPanel ravenPanel;
+	 */
 	private PanelType dataType;
-	
-	
+
 	public enum PanelType {
 		RAM_MAPPING, MINIMAP2_MAPPING, MINIMAP2_INDEXING, MINIMAP2_ALIGN, RAVEN;
 	}
-	
+
 	public App() {
 		super();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -66,9 +67,9 @@ public class App extends JFrame
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
-	
+
 	protected void initGUI() throws IOException {
 		System.out.println("Current directory: " + System.getProperty("user.dir"));
 		System.out.println("Initialazing GUI..");
@@ -197,6 +198,32 @@ public class App extends JFrame
 		
 		menuBar.add(helpMenu);
 		
+		JMenu checkoutMenu = new JMenu("Checkout processes");
+		checkoutMenu.addMenuListener(new MenuListener() {
+			
+			@Override
+			public void menuSelected(MenuEvent arg0) {
+				SwingUtilities.invokeLater(() -> {
+		        	ProcessesTable table = new ProcessesTable();
+		        	table.setVisible(true);
+				       	table.pack();
+		        });		
+			}
+			
+			@Override
+			public void menuDeselected(MenuEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		menuBar.add(checkoutMenu);
+		
 		this.add(menuBar, BorderLayout.NORTH);
 		
 		JPanel buttonsPanel = new JPanel();
@@ -235,119 +262,78 @@ public class App extends JFrame
 	    add(buttonsPanel, BorderLayout.SOUTH);
 
 	}
-	
-	/*private class RunAction extends AbstractAction {
-		private PanelType type;
-		
-		public RunAction(PanelType type) {
-			super();
-			this.type = type;
-		}
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			if (type == PanelType.RAM_MAPPING) {
-				RamMappingExecution ramMap = new RamMappingExecution();
-			}
-		}
-		
-	}*/
-	
-	
-	
-			
-			
-		
-	/*private class MmIndexingExecution extends SwingWorker<Integer, Integer> {
-			
-		public MmIndexingExecution() {
-			super();
-			
-			try {
-				doInBackground();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-			
-		@Override
-		protected Integer doInBackground() throws Exception {
-			ArrayList<String> commands = new ArrayList<String>();
-				
-			String minimap2Path = minimap2IndexingPanel.getMinimap2Path();
-			if (!minimap2Path.equals("")) {
-				commands.add(minimap2Path);
-			} else {
-				return null;
-			}
-			
-			commands.add("-d");
-			
-			String indexPath = minimap2IndexingPanel.getIndexPath();
-			if (!indexPath.equals(""))
-				commands.add(indexPath);
-			else
-				return null;
-			
-			String targetPath = minimap2IndexingPanel.getTargetPath();
-			if (!targetPath.equals(""))
-				commands.add(targetPath);
-			
-			int kmer = minimap2IndexingPanel.getKmerField();
-			if (kmer == -2) 
-				return null;
-			else if (kmer >= 0) {
-				commands.add("-k");
-				commands.add(Integer.toString(kmer));
-			}
-			
-			int split = minimap2IndexingPanel.getSplitField();
-			if (split == -2) 
-				return null;
-			else if (split >= 0) {
-				commands.add("-I");
-				commands.add(Integer.toString(split));
-			}
-				
-			int window = minimap2IndexingPanel.getWindowField();
-			if (window == -2) 
-				return null;
-			else if (window >= 0) {
-				commands.add("-w");
-				commands.add(Integer.toString(window));
-			}
-			
-			if (minimap2IndexingPanel.getHomoKmer())
-				commands.add("-H");
-			
-			System.out.print("Running cominimap2and: ");
-			for (String s : commands)
-				System.out.print(s + " ");
-			System.out.println();
-			
-			ProcessBuilder pb = new ProcessBuilder(commands);
-			File errorFile = new File(indexPath.substring(0, indexPath.length() - 4) + "_stream.log");
-			errorFile.createNewFile();
-			pb.redirectError(errorFile);
-			pb.redirectOutput(new File(indexPath));
-			Process process = pb.start();
-			JOptionPane.showMessageDialog(new JFrame(), "Indexing running.", 
-					"Dialog", JOptionPane.INFORMATION_MESSAGE);
-			
-			return null;
 
-		
-		}
-	}*/ 
-	
-	
-    public static void main( String[] args )
-    {
-        SwingUtilities.invokeLater(() -> {
-        	App mainApp = new App();
-        	mainApp.setVisible(true);
-        	mainApp.pack();
-        	
-        });
-    }
+	/*
+	 * private class RunAction extends AbstractAction { private PanelType type;
+	 * 
+	 * public RunAction(PanelType type) { super(); this.type = type; }
+	 * 
+	 * @Override public void actionPerformed(ActionEvent arg0) { if (type ==
+	 * PanelType.RAM_MAPPING) { RamMappingExecution ramMap = new
+	 * RamMappingExecution(); } }
+	 * 
+	 * }
+	 */
+
+	/*
+	 * private class MmIndexingExecution extends SwingWorker<Integer, Integer> {
+	 * 
+	 * public MmIndexingExecution() { super();
+	 * 
+	 * try { doInBackground(); } catch (Exception e) { // TODO Auto-generated catch
+	 * block e.printStackTrace(); } }
+	 * 
+	 * @Override protected Integer doInBackground() throws Exception {
+	 * ArrayList<String> commands = new ArrayList<String>();
+	 * 
+	 * String minimap2Path = minimap2IndexingPanel.getMinimap2Path(); if
+	 * (!minimap2Path.equals("")) { commands.add(minimap2Path); } else { return
+	 * null; }
+	 * 
+	 * commands.add("-d");
+	 * 
+	 * String indexPath = minimap2IndexingPanel.getIndexPath(); if
+	 * (!indexPath.equals("")) commands.add(indexPath); else return null;
+	 * 
+	 * String targetPath = minimap2IndexingPanel.getTargetPath(); if
+	 * (!targetPath.equals("")) commands.add(targetPath);
+	 * 
+	 * int kmer = minimap2IndexingPanel.getKmerField(); if (kmer == -2) return null;
+	 * else if (kmer >= 0) { commands.add("-k");
+	 * commands.add(Integer.toString(kmer)); }
+	 * 
+	 * int split = minimap2IndexingPanel.getSplitField(); if (split == -2) return
+	 * null; else if (split >= 0) { commands.add("-I");
+	 * commands.add(Integer.toString(split)); }
+	 * 
+	 * int window = minimap2IndexingPanel.getWindowField(); if (window == -2) return
+	 * null; else if (window >= 0) { commands.add("-w");
+	 * commands.add(Integer.toString(window)); }
+	 * 
+	 * if (minimap2IndexingPanel.getHomoKmer()) commands.add("-H");
+	 * 
+	 * System.out.print("Running cominimap2and: "); for (String s : commands)
+	 * System.out.print(s + " "); System.out.println();
+	 * 
+	 * ProcessBuilder pb = new ProcessBuilder(commands); File errorFile = new
+	 * File(indexPath.substring(0, indexPath.length() - 4) + "_stream.log");
+	 * errorFile.createNewFile(); pb.redirectError(errorFile); pb.redirectOutput(new
+	 * File(indexPath)); Process process = pb.start();
+	 * JOptionPane.showMessageDialog(new JFrame(), "Indexing running.", "Dialog",
+	 * JOptionPane.INFORMATION_MESSAGE);
+	 * 
+	 * return null;
+	 * 
+	 * 
+	 * } }
+	 */
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(() -> {
+			App mainApp = new App();
+			mainApp.setVisible(true);
+			mainApp.pack();
+
+		});
+	}
 }
