@@ -35,7 +35,7 @@ public class RamExecution extends SwingWorker<Void, Void>{
 		if (threads == -2) 
 			return null;
 		else if (threads >= 0) {
-			commands.add("-t");
+			commands.add("--threads");
 			commands.add(Integer.toString(threads));
 		}
 		

@@ -16,7 +16,7 @@ import javax.swing.SwingUtilities;
 public class ProcessRunner {
 	
 	public enum ProcessStates {
-		RUNNING, FAILED, FINNISHED;
+		RUNNING, FAILED, FINISHED;
 	}
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -118,7 +118,7 @@ public class ProcessRunner {
 				System.out.println("Found id");
 				content[5] = timeStampFinish;
 				if (status == 0)
-					content[7] = ProcessStates.FINNISHED.toString();
+					content[7] = ProcessStates.FINISHED.toString();
 				else
 					content[7] = ProcessStates.FAILED.toString();
 				fileContent.set(i, String.join(" : ", content));

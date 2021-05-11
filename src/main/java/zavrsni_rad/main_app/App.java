@@ -206,7 +206,7 @@ public class App extends JFrame {
 				SwingUtilities.invokeLater(() -> {
 		        	ProcessesTable table = new ProcessesTable();
 		        	table.setVisible(true);
-				       	table.pack();
+				    //table.pack();
 		        });		
 			}
 			
