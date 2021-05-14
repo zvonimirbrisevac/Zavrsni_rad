@@ -2,14 +2,16 @@ package zavrsni_rad.main_app;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.AbstractAction;
 import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -21,15 +23,16 @@ import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import zavrsni_rad.analyzers.PafAnalyzer;
+import zavrsni_rad.process_runner.ProcessRunner;
 import zavrsni_rad.swing_components.Minimap2AlignPanel;
 import zavrsni_rad.swing_components.Minimap2IndexPanel;
-import zavrsni_rad.swing_components.RamPanel;
 import zavrsni_rad.swing_components.Minimap2MappingPanel;
 import zavrsni_rad.swing_components.ProcessesTable;
+import zavrsni_rad.swing_components.RamPanel;
 import zavrsni_rad.swing_components.RavenPanel;
 import zavrsni_rad.swing_workers.Minimap2AlignExecution;
 import zavrsni_rad.swing_workers.Minimap2MappingExecution;
@@ -60,7 +63,9 @@ public class App extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(500, 500);
 		setLocation(100, 100);
-		setTitle("Aplikacija");
+		setTitle("MapIt");
+		//ImageIcon icon = new ImageIcon("icons/MapIt_icon.png");
+		//setIconImage(icon);
 		try {
 			initGUI();
 		} catch (IOException e) {
@@ -224,6 +229,39 @@ public class App extends JFrame {
 		});
 		menuBar.add(checkoutMenu);
 		
+		JMenu analyzeMenu = new JMenu("Analyze");
+		analyzeMenu.addMenuListener(new MenuListener() {
+
+			@Override
+			public void menuSelected(MenuEvent arg0) {
+				String id = null;
+				id = (String)JOptionPane.showInputDialog(
+	                    App.this, "Please enter process id: ",
+	                    "Enter id",
+	                    JOptionPane.PLAIN_MESSAGE,
+						null, null, "");
+				if (id != null && !id.equals(""))
+					analyze(id);
+					
+				
+			}
+			
+			@Override
+			public void menuCanceled(MenuEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void menuDeselected(MenuEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		menuBar.add(analyzeMenu);
+		
 		this.add(menuBar, BorderLayout.NORTH);
 		
 		JPanel buttonsPanel = new JPanel();
@@ -336,4 +374,46 @@ public class App extends JFrame {
 
 		});
 	}
+	
+	public void analyze(String id) {
+		File allProcesses = new File("all_processes/all_process.log");
+		if (!allProcesses.exists())
+			return;
+		List<String> processesList = null;
+		try {
+			processesList = new ArrayList<>(Files.readAllLines(allProcesses.toPath()));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		for (String process : processesList) {
+			String[] data = process.split(" : ");
+			if (data[0].equals(id)) {
+				if (!data[7].equals(ProcessRunner.ProcessStates.FINISHED.toString())) {
+					JOptionPane.showMessageDialog(App.this, "Process can not be analyzed if it does not have status FINISHED.\n"
+							+ "Current status: " + data[7], 
+							"Error", JOptionPane.ERROR_MESSAGE);
+				}
+				if (data[6].equals(PanelType.MINIMAP2_MAPPING.toString())) {
+					SwingUtilities.invokeLater(() -> {
+						PafAnalyzer analyzer = null;
+						try {
+							analyzer = new PafAnalyzer(data);
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						analyzer.setVisible(true);
+						analyzer.pack();
+					});
+				}
+				return;
+			}
+			
+		}
+		JOptionPane.showMessageDialog(App.this, "Id not found.",
+				"Error", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	
 }
