@@ -194,7 +194,7 @@ public class Minimap2AlignPanel extends JPanel {
 		filesPanel.add(new JPanel());
 		
 		
-		SpringUtilities.makeCompactGrid(filesPanel, 6, 3, 0, 0, 10, 10);
+		SpringUtilities.makeCompactGrid(filesPanel, 6, 3, 5, 5, 10, 10);
 		add(filesPanel);
 		
 		/*indexOptionalPanel = new Minimap2AlignOptPanel();

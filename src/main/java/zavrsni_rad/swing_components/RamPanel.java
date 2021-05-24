@@ -170,7 +170,7 @@ public class RamPanel extends JPanel {
 		
 		
 		
-		SpringUtilities.makeCompactGrid(filesPanel, 4, 3, 0, 0, 10, 10);
+		SpringUtilities.makeCompactGrid(filesPanel, 4, 3, 5, 5, 10, 10);
 		add(filesPanel);
 
 		//optionalPanel = new RamOptPanel(); 

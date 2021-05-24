@@ -23,7 +23,9 @@ public class Minimap2AlignExecution extends SwingWorker<Integer, Integer> {
 	protected Integer doInBackground() throws Exception {
 		ArrayList<String> commands = new ArrayList<String>();
 		commands.add("java");
-		commands.add("./src/main/java/zavrsni_rad/process_runner/ProcessRunner.java");
+		commands.add("-cp");
+		commands.add("target/classes");
+		commands.add("zavrsni_rad.swing_workers.ProcessRunner");
 		
 		String minimap2Path = panel.getMinimap2Path();
 		if (!minimap2Path.equals(""))

@@ -127,7 +127,7 @@ public class RavenPanel extends JPanel {
 		
 		filesPanel.add(new JPanel());
 		
-		SpringUtilities.makeCompactGrid(filesPanel, 3, 3, 0, 0, 10, 10);
+		SpringUtilities.makeCompactGrid(filesPanel, 3, 3, 5, 5, 10, 10);
 		
 		this.add(filesPanel);
 		

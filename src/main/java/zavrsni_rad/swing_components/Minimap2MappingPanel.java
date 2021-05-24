@@ -148,7 +148,7 @@ public class Minimap2MappingPanel extends JPanel{
 		this.add(new JPanel());
 		
 		
-		SpringUtilities.makeCompactGrid(this, 5, 3, 0, 0, 10, 10);
+		SpringUtilities.makeCompactGrid(this, 5, 3, 5, 5, 10, 10);
 		
 	}
 	

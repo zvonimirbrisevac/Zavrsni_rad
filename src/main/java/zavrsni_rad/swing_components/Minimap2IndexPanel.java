@@ -113,7 +113,7 @@ public class Minimap2IndexPanel extends JPanel {
 
 		filesPanel.add(indexPanel);
 		
-		SpringUtilities.makeCompactGrid(filesPanel, 3, 2, 0, 0, 10, 10);
+		SpringUtilities.makeCompactGrid(filesPanel, 3, 2, 5, 5, 10, 10);
 		add(filesPanel);
 		
 		//optionalPanel = new Minimap2IndexingOptPanel();

@@ -1,9 +1,13 @@
 package zavrsni_rad.main_app;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Image;
+import java.awt.Insets;
 import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -27,6 +31,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
 import zavrsni_rad.analyzers.PafAnalyzer;
+import zavrsni_rad.analyzers.SamAnalyzer;
 import zavrsni_rad.process_runner.ProcessRunner;
 import zavrsni_rad.swing_components.Minimap2AlignPanel;
 import zavrsni_rad.swing_components.Minimap2IndexPanel;
@@ -77,11 +82,11 @@ public class App extends JFrame {
 
 	protected void initGUI() throws IOException {
 		System.out.println("Current directory: " + System.getProperty("user.dir"));
-		System.out.println("Initialazing GUI..");
+		System.out.println("Initializing GUI..");
 		LayoutManager layout = new BorderLayout();
 		this.setLayout(layout);
 		
-		centralPanel = new JPanel();
+		centralPanel = new JPanel(new BorderLayout());
 		add(centralPanel, BorderLayout.CENTER);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -98,6 +103,12 @@ public class App extends JFrame {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			JPanel labelPanel = new JPanel(new GridBagLayout());
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.insets = new Insets(5, 0, 0, 0);
+			JLabel label = new JLabel("Minimap2 indexing");
+			labelPanel.add(label, constraints);
+			centralPanel.add(labelPanel, BorderLayout.NORTH);
 			centralPanel.add(centralDataPanel, BorderLayout.CENTER);
 			dataType = PanelType.MINIMAP2_INDEXING;
 			centralPanel.revalidate();
@@ -115,6 +126,12 @@ public class App extends JFrame {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			JPanel labelPanel = new JPanel(new GridBagLayout());
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.insets = new Insets(5, 0, 0, 0);
+			JLabel label = new JLabel("Minimap2 alignment");
+			labelPanel.add(label, constraints);
+			centralPanel.add(labelPanel, BorderLayout.NORTH);
 			centralPanel.add(centralDataPanel, BorderLayout.CENTER);
 			dataType = PanelType.MINIMAP2_ALIGN;
 			centralPanel.revalidate();
@@ -132,6 +149,12 @@ public class App extends JFrame {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
+			JPanel labelPanel = new JPanel(new GridBagLayout());
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.insets = new Insets(5, 0, 0, 0);
+			JLabel label = new JLabel("Minimap2 mapping");
+			labelPanel.add(label, constraints);
+			centralPanel.add(labelPanel, BorderLayout.NORTH);
 			centralPanel.add(centralDataPanel, BorderLayout.CENTER);
 			dataType = PanelType.MINIMAP2_MAPPING;
 			centralPanel.revalidate();
@@ -152,7 +175,13 @@ public class App extends JFrame {
 				e1.printStackTrace();
 			}
 			dataType = PanelType.RAM_MAPPING;
-			centralPanel.add(centralDataPanel);
+			centralPanel.add(centralDataPanel, BorderLayout.CENTER);
+			JPanel labelPanel = new JPanel(new GridBagLayout());
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.insets = new Insets(5, 0, 0, 0);
+			JLabel label = new JLabel("Ram");
+			labelPanel.add(label, constraints);
+			centralPanel.add(labelPanel, BorderLayout.NORTH);
 			centralPanel.repaint();
 			centralPanel.revalidate();
 			this.pack();
@@ -169,7 +198,13 @@ public class App extends JFrame {
 				e1.printStackTrace();
 			}
 			dataType = PanelType.RAVEN;
-			centralPanel.add(centralDataPanel);
+			centralPanel.add(centralDataPanel, BorderLayout.CENTER);
+			JPanel labelPanel = new JPanel(new GridBagLayout());
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.insets = new Insets(5, 0, 0, 0);
+			JLabel label = new JLabel("Raven");
+			labelPanel.add(label, constraints);
+			centralPanel.add(labelPanel, BorderLayout.NORTH);
 			centralPanel.repaint();
 			centralPanel.revalidate();
 			this.pack();
@@ -203,37 +238,28 @@ public class App extends JFrame {
 		
 		menuBar.add(helpMenu);
 		
-		JMenu checkoutMenu = new JMenu("Checkout processes");
-		checkoutMenu.addMenuListener(new MenuListener() {
+		JMenu processesMenu = new JMenu("Processes");
+		
+		JMenuItem checkoutProcessesMenu = new JMenuItem("Checkout processes");
+		checkoutProcessesMenu.addActionListener(new ActionListener() {
 			
 			@Override
-			public void menuSelected(MenuEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {
 				SwingUtilities.invokeLater(() -> {
 		        	ProcessesTable table = new ProcessesTable();
 		        	table.setVisible(true);
-				    //table.pack();
-		        });		
-			}
-			
-			@Override
-			public void menuDeselected(MenuEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void menuCanceled(MenuEvent arg0) {
-				// TODO Auto-generated method stub
-				
+				}
+				);
 			}
 		});
-		menuBar.add(checkoutMenu);
+	
+		processesMenu.add(checkoutProcessesMenu);
 		
-		JMenu analyzeMenu = new JMenu("Analyze");
-		analyzeMenu.addMenuListener(new MenuListener() {
-
+		JMenuItem analyzeProcessesMenu = new JMenuItem("Analyze process");
+		analyzeProcessesMenu.addActionListener(new ActionListener() {
+			
 			@Override
-			public void menuSelected(MenuEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {
 				String id = null;
 				id = (String)JOptionPane.showInputDialog(
 	                    App.this, "Please enter process id: ",
@@ -242,25 +268,12 @@ public class App extends JFrame {
 						null, null, "");
 				if (id != null && !id.equals(""))
 					analyze(id);
-					
 				
 			}
-			
-			@Override
-			public void menuCanceled(MenuEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void menuDeselected(MenuEvent arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-			
 		});
+		processesMenu.add(analyzeProcessesMenu);
 		
-		menuBar.add(analyzeMenu);
+		menuBar.add(processesMenu);
 		
 		this.add(menuBar, BorderLayout.NORTH);
 		
@@ -272,28 +285,36 @@ public class App extends JFrame {
 
 	    JButton buttonRun = new JButton("Run");
 	    //buttonRun.setAction(new RunAction(dataType));
-	    buttonRun.addActionListener((e) -> {
-	    	if (dataType == PanelType.RAM_MAPPING) 
-				new RamExecution((RamPanel)centralDataPanel).execute();
-			else if (dataType == PanelType.MINIMAP2_ALIGN)
-				new Minimap2AlignExecution((Minimap2AlignPanel)centralDataPanel).execute();
-			else if (dataType == PanelType.MINIMAP2_MAPPING)
-				new Minimap2MappingExecution((Minimap2MappingPanel)centralDataPanel).execute();
-			else if (dataType == PanelType.RAVEN)
-				new RavenExecution((RavenPanel)centralDataPanel).execute();
-	    });
+	    buttonRun.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (dataType == PanelType.RAM_MAPPING) 
+					new RamExecution((RamPanel)centralDataPanel).execute();
+				else if (dataType == PanelType.MINIMAP2_ALIGN)
+					new Minimap2AlignExecution((Minimap2AlignPanel)centralDataPanel).execute();
+				else if (dataType == PanelType.MINIMAP2_MAPPING)
+					new Minimap2MappingExecution((Minimap2MappingPanel)centralDataPanel).execute();
+				else if (dataType == PanelType.RAVEN)
+					new RavenExecution((RavenPanel)centralDataPanel).execute();
+			}
+		});
 	    buttonsGridPanel.add(buttonRun);
 
 	    JButton buttonDelete = new JButton("Delete");
-	    buttonDelete.addActionListener((e) -> {
-	    	if (dataType == PanelType.RAM_MAPPING) 
-	    		((RamPanel) centralDataPanel).clearFields();
-	    	else if (dataType == PanelType.MINIMAP2_ALIGN) 
-	    		((Minimap2AlignPanel) centralDataPanel).clearFields();
-	    	else if (dataType == PanelType.MINIMAP2_MAPPING)
-	    		((Minimap2MappingPanel) centralDataPanel).clearFields();
-	    	else if (dataType == PanelType.RAVEN)
-	    		((RavenPanel) centralDataPanel).clearFields();
+	    buttonDelete.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (dataType == PanelType.RAM_MAPPING) 
+		    		((RamPanel) centralDataPanel).clearFields();
+		    	else if (dataType == PanelType.MINIMAP2_ALIGN) 
+		    		((Minimap2AlignPanel) centralDataPanel).clearFields();
+		    	else if (dataType == PanelType.MINIMAP2_MAPPING)
+		    		((Minimap2MappingPanel) centralDataPanel).clearFields();
+		    	else if (dataType == PanelType.RAVEN)
+		    		((RavenPanel) centralDataPanel).clearFields();
+			}
 	    });
 	    buttonsGridPanel.add(buttonDelete);
 	    
@@ -393,8 +414,9 @@ public class App extends JFrame {
 					JOptionPane.showMessageDialog(App.this, "Process can not be analyzed if it does not have status FINISHED.\n"
 							+ "Current status: " + data[7], 
 							"Error", JOptionPane.ERROR_MESSAGE);
+					return;
 				}
-				if (data[6].equals(PanelType.MINIMAP2_MAPPING.toString())) {
+				if (data[6].equals(PanelType.MINIMAP2_MAPPING.toString()) || data[6].equals(PanelType.RAM_MAPPING.toString())) {
 					SwingUtilities.invokeLater(() -> {
 						PafAnalyzer analyzer = null;
 						try {
@@ -406,6 +428,16 @@ public class App extends JFrame {
 						analyzer.setVisible(true);
 						analyzer.pack();
 					});
+				} else if (data[6].equals(PanelType.MINIMAP2_ALIGN.toString())) {
+					SamAnalyzer analyzer = null;
+					try {
+						analyzer = new SamAnalyzer(data);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					analyzer.setVisible(true);
+					analyzer.pack();
 				}
 				return;
 			}

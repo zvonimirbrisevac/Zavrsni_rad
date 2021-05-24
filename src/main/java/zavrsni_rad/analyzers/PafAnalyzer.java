@@ -21,14 +21,15 @@ import javax.swing.SwingConstants;
 
 import zavrsni_rad.swing_layouts.SpringUtilities;
 
-public class PafAnalyzer  extends JFrame{
+public class PafAnalyzer extends JFrame{
 	
 	private JPanel centralPanel;
 	private JPanel southPanel;
 	
 	private long positiveStrand = 0;
 	private long queryTotalLength = 0;
-	private long targetTotalLength = 0;
+	private long queryTotalStartToEnd = 0;
+	private double averageQueryCoverage = 0;
 	private long totalResidueMatches = 0;
 	private long totalAlignmentBlockLength = 0;
 	private long totalMappingQuality = 0;
@@ -61,34 +62,32 @@ public class PafAnalyzer  extends JFrame{
 		
 		centralPanel = new JPanel(new SpringLayout());
 		
-		centralPanel.add(new JLabel("Query total length:\t", SwingConstants.LEFT));
+		centralPanel.add(new JLabel("Average query coverage in alignment blocks:\t", SwingConstants.LEFT));
 		
-		centralPanel.add(new JLabel(lf.format(queryTotalLength), SwingConstants.LEFT));
-		
-		centralPanel.add(new JLabel("Target total length:\t", SwingConstants.LEFT));
-		
-		centralPanel.add(new JLabel(lf.format(targetTotalLength), SwingConstants.LEFT));
+		double queryCoverage = averageQueryCoverage / fileLength;
+		centralPanel.add(new JLabel(df.format(queryCoverage), SwingConstants.LEFT));
 		
 		centralPanel.add(new JLabel("Percentage of original relative strands:\t", SwingConstants.LEFT));
 		
 		double percOriginalStrands = ((double)positiveStrand) / fileLength;
 		centralPanel.add(new JLabel(df.format(percOriginalStrands), SwingConstants.LEFT));
 		
-		centralPanel.add(new JLabel("Total residue matches:\t", SwingConstants.LEFT));
+		centralPanel.add(new JLabel("Average percentage of matches in alignment block:\t", SwingConstants.LEFT));
 		
-		centralPanel.add(new JLabel(lf.format(totalResidueMatches), SwingConstants.LEFT));
+		double averageResidueMatches = ((double) totalResidueMatches) / totalAlignmentBlockLength;
+		centralPanel.add(new JLabel(df.format(averageResidueMatches), SwingConstants.LEFT));
 		
 		centralPanel.add(new JLabel("Average length of alignment block:\t", SwingConstants.LEFT));
 		
 		double averageBlockLength = ((double) totalAlignmentBlockLength) / fileLength;
 		centralPanel.add(new JLabel(df.format(averageBlockLength), SwingConstants.LEFT));
 		
-		centralPanel.add(new JLabel("Average mapping quality:\t", SwingConstants.LEFT));
+		centralPanel.add(new JLabel("Average mapping quality (0-255):\t", SwingConstants.LEFT));
 		
 		double averageMapQuality = ((double) totalMappingQuality) / fileLength;
 		centralPanel.add(new JLabel(df.format(averageMapQuality), SwingConstants.LEFT));
 		
-		SpringUtilities.makeCompactGrid(centralPanel, 6, 2, 20, 20, 10, 10);
+		SpringUtilities.makeCompactGrid(centralPanel, 5, 2, 20, 20, 10, 10);
 		
 		this.add(centralPanel, BorderLayout.CENTER);
 		
@@ -123,7 +122,7 @@ public class PafAnalyzer  extends JFrame{
 			queryTotalLength += Long.parseLong(pafData[1]);
 			if (pafData[4].equals("+"))
 				positiveStrand++;
-			targetTotalLength += Long.parseLong(pafData[6]);
+			averageQueryCoverage += ((double)Long.parseLong(pafData[3]) - Long.parseLong(pafData[2])) / Long.parseLong(pafData[1]);
 			totalResidueMatches += Long.parseLong(pafData[9]);
 			totalAlignmentBlockLength += Long.parseLong(pafData[10]);
 			totalMappingQuality += Long.parseLong(pafData[11]);
