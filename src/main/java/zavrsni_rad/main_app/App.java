@@ -1,6 +1,7 @@
 package zavrsni_rad.main_app;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -10,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +30,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 import zavrsni_rad.analyzers.PafAnalyzer;
 import zavrsni_rad.analyzers.SamAnalyzer;
@@ -227,14 +228,65 @@ public class App extends JFrame {
 		JMenu helpMenu = new JMenu("Help");
 		
 		JMenuItem aboutMinimap2 = new JMenuItem("About Minimap2");
+		aboutMinimap2.addActionListener((e) -> {
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			    try {
+					Desktop.getDesktop().browse(new URI("https://github.com/lh3/minimap2#table-of-contents"));
+				} catch (IOException | URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		JMenuItem aboutRam = new JMenuItem("About Ram");
+		aboutRam.addActionListener((e) -> {
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			    try {
+					Desktop.getDesktop().browse(new URI("https://github.com/lbcb-sci/ram#ram"));
+				} catch (IOException | URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		JMenuItem aboutRaven = new JMenuItem("About Raven");
+		aboutRaven.addActionListener((e) -> {
+			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+			    try {
+					Desktop.getDesktop().browse(new URI("https://github.com/lbcb-sci/raven#raven"));
+				} catch (IOException | URISyntaxException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		
 		helpMenu.add(aboutMinimap2);
 		helpMenu.add(aboutRam);
 		helpMenu.add(aboutRaven);
+		
+		helpMenu.add(new JSeparator(SwingConstants.HORIZONTAL));
+		
+		JMenuItem minimap2Version = new JMenuItem("Minimap2 version");
+		minimap2Version.addActionListener((e) -> {
+			
+		});
+		
+		JMenuItem ramVersion = new JMenuItem("Ram version");
+		ramVersion.addActionListener((e) -> {
+			
+		});
+		
+		JMenuItem ravenVersion = new JMenuItem("Raven version");
+		ravenVersion.addActionListener((e) -> {
+			
+		});
+		
+		helpMenu.add(minimap2Version);
+		helpMenu.add(ramVersion);
+		helpMenu.add(ravenVersion);
 		
 		menuBar.add(helpMenu);
 		

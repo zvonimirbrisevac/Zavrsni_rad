@@ -25,7 +25,7 @@ public class Minimap2MappingExecution extends SwingWorker<Void, Void>{
 		commands.add("java");
 		commands.add("-cp");
 		commands.add("target/classes");
-		commands.add("zavrsni_rad.swing_workers.ProcessRunner");
+		commands.add("zavrsni_rad.process_runner.ProcessRunner");
 		
 		String minimap2Path = panel.getMinimap2Path();
 		if (!minimap2Path.equals(""))

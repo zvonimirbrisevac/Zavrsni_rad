@@ -152,11 +152,11 @@ public class RavenPanel extends JPanel {
 	}
 	
 	public String getRavenPath() {
-		if (sequencesPath.getText().equals("")) {
+		if (ravenPath.getText().equals("")) {
 			JOptionPane.showMessageDialog(filesPanel, "No Raven path!", "Error", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
-		return sequencesPath.getText();
+		return ravenPath.getText();
 	}
 	
 	public int getThreadsField() {

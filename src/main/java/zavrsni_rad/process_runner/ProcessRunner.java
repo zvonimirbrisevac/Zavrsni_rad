@@ -13,6 +13,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import zavrsni_rad.main_app.App;
+
 public class ProcessRunner {
 	
 	public enum ProcessStates {
@@ -86,7 +88,10 @@ public class ProcessRunner {
 		}
 		StringBuilder sb = new StringBuilder();
 		sb.append(Integer.toString(id) + " : ");
-		sb.append(refFile + " : ");
+		if (!type.equals(App.PanelType.RAVEN.toString()))	
+			sb.append(refFile + " : ");
+		else
+			sb.append("- : ");
 		sb.append(querysFiles + " : ");
 		sb.append(outputFile.getAbsolutePath() + " : ");
 		sb.append(timeStampStart + " : ");
