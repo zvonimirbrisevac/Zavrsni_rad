@@ -233,7 +233,9 @@ public class App extends JFrame {
 			    try {
 					Desktop.getDesktop().browse(new URI("https://github.com/lh3/minimap2#table-of-contents"));
 				} catch (IOException | URISyntaxException e1) {
-					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(App.this, "Something went wrong, failed to fetch:\n"
+							+ "https://github.com/lh3/minimap2#table-of-contents",
+							"Error", JOptionPane.ERROR_MESSAGE);
 					e1.printStackTrace();
 				}
 			}
@@ -245,7 +247,9 @@ public class App extends JFrame {
 			    try {
 					Desktop.getDesktop().browse(new URI("https://github.com/lbcb-sci/ram#ram"));
 				} catch (IOException | URISyntaxException e1) {
-					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(App.this, "Something went wrong, failed to fetch:\n"
+							+ "https://github.com/lbcb-sci/ram#ram",
+							"Error", JOptionPane.ERROR_MESSAGE);
 					e1.printStackTrace();
 				}
 			}
@@ -257,7 +261,9 @@ public class App extends JFrame {
 			    try {
 					Desktop.getDesktop().browse(new URI("https://github.com/lbcb-sci/raven#raven"));
 				} catch (IOException | URISyntaxException e1) {
-					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(App.this, "Something went wrong, failed to fetch:\n"
+							+ "https://github.com/lbcb-sci/raven#raven ",
+							"Error", JOptionPane.ERROR_MESSAGE);
 					e1.printStackTrace();
 				}
 			}
