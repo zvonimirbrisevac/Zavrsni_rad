@@ -25,6 +25,7 @@ import javax.swing.text.MaskFormatter;
 import javax.swing.text.NumberFormatter;
 
 import zavrsni_rad.swing_layouts.SpringUtilities;
+import zavrsni_rad.utils.*;
 
 public class RamPanel extends JPanel {
 
@@ -49,17 +50,19 @@ public class RamPanel extends JPanel {
 		filesPanel.add(pleaseCheck);
 
 		ramPath = new JTextField(16);
-		ramPath.setText(fetchRamPath());
+		ramPath.setText(Utils.fetchRamPath());
 
 		JButton chooseRamFileButton = new JButton("Choose file");
 		chooseRamFileButton.addActionListener((e) -> {
 			JFileChooser fileChooser = null;
 			try {
-				fileChooser = new JFileChooser(fetchRamPath());
+				fileChooser = new JFileChooser(Utils.fetchRamPath());
 				int returnValue = fileChooser.showOpenDialog(RamPanel.this);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					ramPath.setText(file.toPath().toString());
+					Utils.writePath("ram", file.toPath().toString());
+
 				}
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -178,15 +181,6 @@ public class RamPanel extends JPanel {
 		//add(optionalPanel);
 	}
 
-	public String fetchRamPath() throws IOException {
-		ProcessBuilder pb = new ProcessBuilder("find /home -type f -name ram".split(" "));
-		Process process = pb.start();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-		StringBuilder builder = new StringBuilder();
-		String path = reader.readLine();
-		reader.close();
-		return path == null ? "" : path;
-	}
 
 	public String getRamPath() {
 		if (ramPath.getText().equals("")) {

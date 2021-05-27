@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 import javax.swing.text.NumberFormatter;
 
 import zavrsni_rad.swing_layouts.SpringUtilities;
+import zavrsni_rad.utils.Utils;
 
 public class RavenPanel extends JPanel {
 	
@@ -39,17 +40,19 @@ public class RavenPanel extends JPanel {
 		filesPanel.add(pleaseCheck);
 
 		ravenPath = new JTextField(16);
-		ravenPath.setText(fetchRavenPath());
+		ravenPath.setText(Utils.fetchRavenPath());
 
 		JButton chooseRavenFileButton = new JButton("Choose file");
 		chooseRavenFileButton.addActionListener((e) -> {
 			JFileChooser fileChooser = null;
 			try {
-				fileChooser = new JFileChooser(fetchRavenPath());
+				fileChooser = new JFileChooser(Utils.fetchRavenPath());
 				int returnValue = fileChooser.showOpenDialog(RavenPanel.this);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					ravenPath.setText(file.toPath().toString());
+					Utils.writePath("raven", file.toPath().toString());
+
 				}
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -133,15 +136,6 @@ public class RavenPanel extends JPanel {
 		
 	}
 	
-	public String fetchRavenPath() throws IOException {
-		ProcessBuilder pb = new ProcessBuilder("find /home -type f -name raven".split(" "));
-		Process process = pb.start();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-		StringBuilder builder = new StringBuilder();
-		String path = reader.readLine();
-		reader.close();
-		return path == null ? "" : path;
-	}
 	
 	public String getSequencesPath() {
 		if (sequencesPath.getText().equals("")) {

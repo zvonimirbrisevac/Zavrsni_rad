@@ -19,6 +19,7 @@ import javax.swing.SwingConstants;
 import javax.swing.text.NumberFormatter;
 
 import zavrsni_rad.swing_layouts.SpringUtilities;
+import zavrsni_rad.utils.Utils;
 
 public class Minimap2MappingPanel extends JPanel{
 	/*private JPanel minimap2PathPanel;
@@ -40,17 +41,19 @@ public class Minimap2MappingPanel extends JPanel{
 		this.add(pleaseCheck);
 
 		minimap2Path = new JTextField(16);
-		minimap2Path.setText(fetchMinimap2Path());
+		minimap2Path.setText(Utils.fetchMinimap2Path());
 
 		JButton chooseMinimap2FileButton = new JButton("Choose file");
 		chooseMinimap2FileButton.addActionListener((e) -> {
 			JFileChooser fileChooser = null;
 			try {
-				fileChooser = new JFileChooser(fetchMinimap2Path());
+				fileChooser = new JFileChooser(Utils.fetchMinimap2Path());
 				int returnValue = fileChooser.showOpenDialog(Minimap2MappingPanel.this);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					minimap2Path.setText(file.toPath().toString());
+					Utils.writePath("minimap2", file.toPath().toString());
+
 				}
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -150,16 +153,6 @@ public class Minimap2MappingPanel extends JPanel{
 		
 		SpringUtilities.makeCompactGrid(this, 5, 3, 5, 5, 10, 10);
 		
-	}
-	
-	public String fetchMinimap2Path() throws IOException {
-		ProcessBuilder pb = new ProcessBuilder("find /home -type f -name minimap2".split(" "));
-		Process process = pb.start();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-		StringBuilder builder = new StringBuilder();
-		String path = reader.readLine();
-		reader.close();
-		return path == null ? "" : path;
 	}
 	
 	public String getMinimap2Path() {

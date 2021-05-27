@@ -86,6 +86,7 @@ public class ProcessRunner {
 			int lastId = Integer.parseInt(lastProcess.split(" : ")[0]);
 			id = lastId + 1;
 		}
+		final int finalId = id;
 		StringBuilder sb = new StringBuilder();
 		sb.append(Integer.toString(id) + " : ");
 		if (!type.equals(App.PanelType.RAVEN.toString()))	
@@ -103,11 +104,11 @@ public class ProcessRunner {
 		Files.write(allProcessLog.toPath(), fileContent);
 		
 		SwingUtilities.invokeLater(() -> {
-			JOptionPane.showMessageDialog(new JFrame(), "Process running.", 
+			JOptionPane.showMessageDialog(new JFrame(), "Process running. Id = " + Integer.toString(finalId), 
 								"", JOptionPane.INFORMATION_MESSAGE);
 		});
 				
-		System.out.println("Process runnig...");
+		System.out.println("Process " + id +" running...");
 		
 		int status = process.waitFor();
 		System.out.println("Procces finished");
@@ -135,13 +136,14 @@ public class ProcessRunner {
 		
 		if (status == 0)
 			SwingUtilities.invokeLater(() -> {
-				JOptionPane.showMessageDialog(new JFrame(), "Process finished.", 
-						"", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(new JFrame(), "Process finished.\n (id = " + Integer.toString(finalId), 
+						"Success", JOptionPane.INFORMATION_MESSAGE);
 			});
 		else 
 			SwingUtilities.invokeLater(() -> {
-				JOptionPane.showMessageDialog(new JFrame(), "Process failed.", 
-						"", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(new JFrame(), "Process failed. Id = " + Integer.toString(finalId) + "\n" +
+						"More about why it failed:\n" + errorFile.getAbsolutePath(), 
+						"Failure", JOptionPane.ERROR_MESSAGE);
 			});
 		
 	}

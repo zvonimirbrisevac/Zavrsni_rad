@@ -21,6 +21,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.NumberFormatter;
 
 import zavrsni_rad.swing_layouts.SpringUtilities;
+import zavrsni_rad.utils.Utils;
 
 public class Minimap2IndexPanel extends JPanel {
 	
@@ -43,17 +44,18 @@ public class Minimap2IndexPanel extends JPanel {
 		filesPanel.add(pleaseCheck);
 
 		mmPath = new JTextField(16);
-		mmPath.setText(fetchMinimap2Path());
+		mmPath.setText(Utils.fetchMinimap2Path());
 		
 		JButton chooseFileButton = new JButton("Choose file");
 		chooseFileButton.addActionListener((e) -> {
 			JFileChooser fileChooser = null;
 			try {
-				fileChooser = new JFileChooser(fetchMinimap2Path());
+				fileChooser = new JFileChooser(Utils.fetchMinimap2Path());
 				int returnValue = fileChooser.showOpenDialog(Minimap2IndexPanel.this);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					mmPath.setText(file.toPath().toString());
+					Utils.writePath("minimap2", file.toPath().toString());
 				}
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -121,15 +123,6 @@ public class Minimap2IndexPanel extends JPanel {
 		
 	}
 	
-	public String fetchMinimap2Path() throws IOException {
-		ProcessBuilder pb = new ProcessBuilder("find /home -type f -name minimap2".split(" "));
-		Process process = pb.start();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-		StringBuilder builder = new StringBuilder();
-		String path = reader.readLine();
-		reader.close();
-		return path == null ? "" : path;
-	}
 	
 	public Minimap2IndexingOptPanel getIndOptPanel() {
 		return optionalPanel; 

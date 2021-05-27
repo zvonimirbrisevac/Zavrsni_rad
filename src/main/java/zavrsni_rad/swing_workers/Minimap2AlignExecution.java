@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import zavrsni_rad.main_app.App;
@@ -81,7 +83,10 @@ public class Minimap2AlignExecution extends SwingWorker<Integer, Integer> {
 		while ((line = reader.readLine()) != null) {
 			System.out.println(line);
 		}
-		
+		if (process.waitFor() != 0) {
+			JOptionPane.showMessageDialog(new JFrame(), "Error occuered, process did nor start.",
+					"Error", JOptionPane.ERROR_MESSAGE);
+		}
 		//System.out.println(">>>>Rezultat executora: " + process.waitFor());
 		
 		return null;

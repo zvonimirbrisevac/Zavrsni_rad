@@ -9,8 +9,10 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -44,6 +46,7 @@ import zavrsni_rad.swing_workers.Minimap2AlignExecution;
 import zavrsni_rad.swing_workers.Minimap2MappingExecution;
 import zavrsni_rad.swing_workers.RamExecution;
 import zavrsni_rad.swing_workers.RavenExecution;
+import zavrsni_rad.utils.Utils;
 
 /**
  * Hello world!
@@ -277,17 +280,86 @@ public class App extends JFrame {
 		
 		JMenuItem minimap2Version = new JMenuItem("Minimap2 version");
 		minimap2Version.addActionListener((e) -> {
-			
+			String path = null;
+			try {
+				path = Utils.fetchMinimap2Path();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if (!path.equals("")) {
+				String version = null;
+				try {
+					version = Utils.getToolVersion(path);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				JOptionPane.showMessageDialog(App.this, "Your Minimap2 version:\n"
+						+ version,
+						"Your Minimap2 version", JOptionPane.INFORMATION_MESSAGE);
+				
+			} else {
+				JOptionPane.showMessageDialog(App.this, "Minimap2 not found, please check path to your Minimap2 program\n" +
+						"(Tools -> Minimap2 alignment/Minimapw mapping)",
+						"Error", JOptionPane.ERROR_MESSAGE);
+			}
 		});
 		
 		JMenuItem ramVersion = new JMenuItem("Ram version");
 		ramVersion.addActionListener((e) -> {
-			
+			String path = null;
+			try {
+				path = Utils.fetchRamPath();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if (!path.equals("")) {
+				String version = null;
+				try {
+					version = Utils.getToolVersion(path);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				JOptionPane.showMessageDialog(App.this, "Your Ram version:\n"
+						+ version,
+						"Your Ram version", JOptionPane.INFORMATION_MESSAGE);
+				
+			}else {
+				JOptionPane.showMessageDialog(App.this, "Ram not found, please check path to your Ram program\n" +
+						"(Tools -> Ram)",
+						"Error", JOptionPane.ERROR_MESSAGE);
+			}
 		});
 		
 		JMenuItem ravenVersion = new JMenuItem("Raven version");
 		ravenVersion.addActionListener((e) -> {
-			
+			String path = null;
+			try {
+				path = Utils.fetchRavenPath();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			if (!path.equals("")) {
+				String version = null;
+				try {
+					version = Utils.getToolVersion(path);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				JOptionPane.showMessageDialog(App.this, "Your Raven version:\n"
+						+ version,
+						"Your Raven version", JOptionPane.INFORMATION_MESSAGE);
+				
+			} else {
+				JOptionPane.showMessageDialog(App.this, "Raven not found, please check path to your Raven program\n" +
+						"(Tools -> Raven)",
+						"Error", JOptionPane.ERROR_MESSAGE);
+			}
 		});
 		
 		helpMenu.add(minimap2Version);
@@ -325,7 +397,7 @@ public class App extends JFrame {
 	                    JOptionPane.PLAIN_MESSAGE,
 						null, null, "");
 				if (id != null && !id.equals(""))
-					analyze(id);
+					Utils.analyze(id, App.this);
 				
 			}
 		});
@@ -392,58 +464,6 @@ public class App extends JFrame {
 	 * }
 	 */
 
-	/*
-	 * private class MmIndexingExecution extends SwingWorker<Integer, Integer> {
-	 * 
-	 * public MmIndexingExecution() { super();
-	 * 
-	 * try { doInBackground(); } catch (Exception e) { // TODO Auto-generated catch
-	 * block e.printStackTrace(); } }
-	 * 
-	 * @Override protected Integer doInBackground() throws Exception {
-	 * ArrayList<String> commands = new ArrayList<String>();
-	 * 
-	 * String minimap2Path = minimap2IndexingPanel.getMinimap2Path(); if
-	 * (!minimap2Path.equals("")) { commands.add(minimap2Path); } else { return
-	 * null; }
-	 * 
-	 * commands.add("-d");
-	 * 
-	 * String indexPath = minimap2IndexingPanel.getIndexPath(); if
-	 * (!indexPath.equals("")) commands.add(indexPath); else return null;
-	 * 
-	 * String targetPath = minimap2IndexingPanel.getTargetPath(); if
-	 * (!targetPath.equals("")) commands.add(targetPath);
-	 * 
-	 * int kmer = minimap2IndexingPanel.getKmerField(); if (kmer == -2) return null;
-	 * else if (kmer >= 0) { commands.add("-k");
-	 * commands.add(Integer.toString(kmer)); }
-	 * 
-	 * int split = minimap2IndexingPanel.getSplitField(); if (split == -2) return
-	 * null; else if (split >= 0) { commands.add("-I");
-	 * commands.add(Integer.toString(split)); }
-	 * 
-	 * int window = minimap2IndexingPanel.getWindowField(); if (window == -2) return
-	 * null; else if (window >= 0) { commands.add("-w");
-	 * commands.add(Integer.toString(window)); }
-	 * 
-	 * if (minimap2IndexingPanel.getHomoKmer()) commands.add("-H");
-	 * 
-	 * System.out.print("Running cominimap2and: "); for (String s : commands)
-	 * System.out.print(s + " "); System.out.println();
-	 * 
-	 * ProcessBuilder pb = new ProcessBuilder(commands); File errorFile = new
-	 * File(indexPath.substring(0, indexPath.length() - 4) + "_stream.log");
-	 * errorFile.createNewFile(); pb.redirectError(errorFile); pb.redirectOutput(new
-	 * File(indexPath)); Process process = pb.start();
-	 * JOptionPane.showMessageDialog(new JFrame(), "Indexing running.", "Dialog",
-	 * JOptionPane.INFORMATION_MESSAGE);
-	 * 
-	 * return null;
-	 * 
-	 * 
-	 * } }
-	 */
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
@@ -454,56 +474,9 @@ public class App extends JFrame {
 		});
 	}
 	
-	public void analyze(String id) {
-		File allProcesses = new File("all_processes/all_process.log");
-		if (!allProcesses.exists())
-			return;
-		List<String> processesList = null;
-		try {
-			processesList = new ArrayList<>(Files.readAllLines(allProcesses.toPath()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		for (String process : processesList) {
-			String[] data = process.split(" : ");
-			if (data[0].equals(id)) {
-				if (!data[7].equals(ProcessRunner.ProcessStates.FINISHED.toString())) {
-					JOptionPane.showMessageDialog(App.this, "Process can not be analyzed if it does not have status FINISHED.\n"
-							+ "Current status: " + data[7], 
-							"Error", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-				if (data[6].equals(PanelType.MINIMAP2_MAPPING.toString()) || data[6].equals(PanelType.RAM_MAPPING.toString())) {
-					SwingUtilities.invokeLater(() -> {
-						PafAnalyzer analyzer = null;
-						try {
-							analyzer = new PafAnalyzer(data);
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						analyzer.setVisible(true);
-						analyzer.pack();
-					});
-				} else if (data[6].equals(PanelType.MINIMAP2_ALIGN.toString())) {
-					SamAnalyzer analyzer = null;
-					try {
-						analyzer = new SamAnalyzer(data);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					analyzer.setVisible(true);
-					analyzer.pack();
-				}
-				return;
-			}
-			
-		}
-		JOptionPane.showMessageDialog(App.this, "Id not found.",
-				"Error", JOptionPane.ERROR_MESSAGE);
-	}
+	
+	
+	
 	
 	
 }

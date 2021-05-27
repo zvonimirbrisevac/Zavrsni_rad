@@ -23,6 +23,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.NumberFormatter;
 
 import zavrsni_rad.swing_layouts.SpringUtilities;
+import zavrsni_rad.utils.Utils;
 
 public class Minimap2AlignPanel extends JPanel {
 	
@@ -49,17 +50,19 @@ public class Minimap2AlignPanel extends JPanel {
 		JLabel pleaseCheck = new JLabel("Path to your minimap2.exe:", SwingConstants.LEFT);
 
 		minimap2Path = new JTextField(16);
-		minimap2Path.setText(fetchMinimap2Path());
+		minimap2Path.setText(Utils.fetchMinimap2Path());
 
 		JButton chooseMinimap2FileButton = new JButton("Choose file");
 		chooseMinimap2FileButton.addActionListener((e) -> {
 			JFileChooser fileChooser = null;
 			try {
-				fileChooser = new JFileChooser(fetchMinimap2Path());
+				fileChooser = new JFileChooser(Utils.fetchMinimap2Path());
 				int returnValue = fileChooser.showOpenDialog(Minimap2AlignPanel.this);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					minimap2Path.setText(file.toPath().toString());
+					Utils.writePath("minimap2", file.toPath().toString());
+
 				}
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
@@ -209,19 +212,10 @@ public class Minimap2AlignPanel extends JPanel {
 	
 	
 	
-	public String fetchMinimap2Path() throws IOException {
-		ProcessBuilder pb = new ProcessBuilder("find /home -type f -name minimap2".split(" "));
-		Process process = pb.start();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-		StringBuilder builder = new StringBuilder();
-		String path = reader.readLine();
-		reader.close();
-		return path == null ? "" : path;
-	}
 	
 	public String getMinimap2Path() {
 		if (minimap2Path.getText().equals("")) {
-			JOptionPane.showMessageDialog(this, "No Minimap2 path!", "Dialog", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "No Minimap2 path!", "Error", JOptionPane.ERROR_MESSAGE);
 
 		}
 		return minimap2Path.getText();
@@ -229,7 +223,7 @@ public class Minimap2AlignPanel extends JPanel {
 	
 	public String getTargetPath() {
 		if (refPath.getText().equals("")) {
-			JOptionPane.showMessageDialog(this, "No ref path!", "Dialog", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "No ref path!", "Error", JOptionPane.ERROR_MESSAGE);
 
 		}
 		return refPath.getText();
@@ -237,7 +231,7 @@ public class Minimap2AlignPanel extends JPanel {
 	
 	public String getSequencesPath() {
 		if (queryPath.getText().equals("")) {
-			JOptionPane.showMessageDialog(this, "No sequences paths!", "Dialog", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "No sequences paths!", "Error", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}
 		return queryPath.getText();
@@ -257,7 +251,7 @@ public class Minimap2AlignPanel extends JPanel {
 				return result;
 			} catch (NumberFormatException e) {
 				JOptionPane.showMessageDialog(this, "Illegal " + dataType + " value!", 
-						"Dialog", JOptionPane.ERROR_MESSAGE);
+						"Error", JOptionPane.ERROR_MESSAGE);
 				return -2;
 			}
 			
