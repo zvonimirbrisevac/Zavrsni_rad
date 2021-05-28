@@ -45,6 +45,8 @@ public class PafAnalyzer extends JFrame{
 		
 		if (getDataFromFile(data))
 			initGUI();
+		else
+			this.dispose();
 		
 	}
 	

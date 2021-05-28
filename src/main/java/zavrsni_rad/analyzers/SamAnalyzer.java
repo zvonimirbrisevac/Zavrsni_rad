@@ -47,6 +47,8 @@ public class SamAnalyzer extends JFrame {
 
 		if (getDataFromFile(data))
 			initGUI();
+		else
+			this.dispose();
 	}
 
 	private void initGUI() {

@@ -228,6 +228,43 @@ public class App extends JFrame {
 		minimap2AlignRadio.doClick();
 		menuBar.add(toolsMenu);
 		
+		JMenu processesMenu = new JMenu("Processes");
+		
+		JMenuItem checkoutProcessesMenu = new JMenuItem("Checkout processes");
+		checkoutProcessesMenu.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				SwingUtilities.invokeLater(() -> {
+		        	ProcessesTable table = new ProcessesTable();
+		        	table.setVisible(true);
+				}
+				);
+			}
+		});
+	
+		processesMenu.add(checkoutProcessesMenu);
+		
+		JMenuItem analyzeProcessesMenu = new JMenuItem("Analyze process");
+		analyzeProcessesMenu.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				String id = null;
+				id = (String)JOptionPane.showInputDialog(
+	                    App.this, "Please enter process id: ",
+	                    "Enter id",
+	                    JOptionPane.PLAIN_MESSAGE,
+						null, null, "");
+				if (id != null && !id.equals(""))
+					Utils.analyze(id, App.this);
+				
+			}
+		});
+		processesMenu.add(analyzeProcessesMenu);
+		
+		menuBar.add(processesMenu);
+		
 		JMenu helpMenu = new JMenu("Help");
 		
 		JMenuItem aboutMinimap2 = new JMenuItem("About Minimap2");
@@ -367,43 +404,6 @@ public class App extends JFrame {
 		helpMenu.add(ravenVersion);
 		
 		menuBar.add(helpMenu);
-		
-		JMenu processesMenu = new JMenu("Processes");
-		
-		JMenuItem checkoutProcessesMenu = new JMenuItem("Checkout processes");
-		checkoutProcessesMenu.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				SwingUtilities.invokeLater(() -> {
-		        	ProcessesTable table = new ProcessesTable();
-		        	table.setVisible(true);
-				}
-				);
-			}
-		});
-	
-		processesMenu.add(checkoutProcessesMenu);
-		
-		JMenuItem analyzeProcessesMenu = new JMenuItem("Analyze process");
-		analyzeProcessesMenu.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				String id = null;
-				id = (String)JOptionPane.showInputDialog(
-	                    App.this, "Please enter process id: ",
-	                    "Enter id",
-	                    JOptionPane.PLAIN_MESSAGE,
-						null, null, "");
-				if (id != null && !id.equals(""))
-					Utils.analyze(id, App.this);
-				
-			}
-		});
-		processesMenu.add(analyzeProcessesMenu);
-		
-		menuBar.add(processesMenu);
 		
 		this.add(menuBar, BorderLayout.NORTH);
 		

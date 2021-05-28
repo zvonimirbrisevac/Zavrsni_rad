@@ -76,7 +76,7 @@ public class RavenPanel extends JPanel {
 		chooseQuastFileButton.addActionListener((e) -> {
 			JFileChooser fileChooser = null;
 			try {
-				fileChooser = new JFileChooser(Utils.fetchRavenPath());
+				fileChooser = new JFileChooser();
 				int returnValue = fileChooser.showOpenDialog(RavenPanel.this);
 				if (returnValue == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
