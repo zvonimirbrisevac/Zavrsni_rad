@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import zavrsni_rad.analyzers.FastaAnalyzer;
 import zavrsni_rad.analyzers.PafAnalyzer;
 import zavrsni_rad.analyzers.SamAnalyzer;
 import zavrsni_rad.main_app.App;
@@ -73,6 +74,10 @@ public class Utils {
 		return getToolPath("raven");
 	}
 	
+	public static String fetchQuastPath() throws IOException {
+		return getToolPath("quast.py");	
+	}
+	
 	public static void analyze(String id, App app) {
 		File allProcesses = new File("all_processes/all_process.log");
 		if (!allProcesses.exists())
@@ -98,23 +103,37 @@ public class Utils {
 						PafAnalyzer analyzer = null;
 						try {
 							analyzer = new PafAnalyzer(data);
+							analyzer.setVisible(true);
+							analyzer.pack();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						analyzer.setVisible(true);
-						analyzer.pack();
 					});
 				} else if (data[6].equals(PanelType.MINIMAP2_ALIGN.toString())) {
 					SamAnalyzer analyzer = null;
 					try {
 						analyzer = new SamAnalyzer(data);
+						analyzer.setVisible(true);
+						analyzer.pack();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					analyzer.setVisible(true);
-					analyzer.pack();
+					
+				} else if (data[6].equals(PanelType.RAVEN.toString())) {
+					FastaAnalyzer analyzer = null;
+					try {
+						analyzer = new FastaAnalyzer(data);
+						analyzer.setVisible(true);
+						analyzer.pack();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				return;
 			}
@@ -132,4 +151,5 @@ public class Utils {
 		reader.close();
 		return versionLine;
 	}
+
 }

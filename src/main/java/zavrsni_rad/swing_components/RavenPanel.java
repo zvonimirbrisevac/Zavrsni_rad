@@ -27,6 +27,7 @@ public class RavenPanel extends JPanel {
 	private JPanel sequencesPanel;
 	private JPanel threadsPanel;
 	private JTextField ravenPath;
+	private JTextField quastPath;
 	private JTextField sequencesPath;
 	private JFormattedTextField threadsField;
 	
@@ -41,6 +42,7 @@ public class RavenPanel extends JPanel {
 
 		ravenPath = new JTextField(16);
 		ravenPath.setText(Utils.fetchRavenPath());
+		filesPanel.add(ravenPath);
 
 		JButton chooseRavenFileButton = new JButton("Choose file");
 		chooseRavenFileButton.addActionListener((e) -> {
@@ -60,15 +62,40 @@ public class RavenPanel extends JPanel {
 			}
 
 		});
+		
+		filesPanel.add(chooseRavenFileButton);
+		
+		JLabel quastLabel = new JLabel("Path to your quast.py (for analysis): ", SwingConstants.LEFT);
+		filesPanel.add(quastLabel);
+		
+		quastPath = new JTextField(16);
+		quastPath.setText(Utils.fetchQuastPath());
+		filesPanel.add(quastPath);
+		
+		JButton chooseQuastFileButton = new JButton("Choose file");
+		chooseQuastFileButton.addActionListener((e) -> {
+			JFileChooser fileChooser = null;
+			try {
+				fileChooser = new JFileChooser(Utils.fetchRavenPath());
+				int returnValue = fileChooser.showOpenDialog(RavenPanel.this);
+				if (returnValue == JFileChooser.APPROVE_OPTION) {
+					File file = fileChooser.getSelectedFile();
+					quastPath.setText(file.toPath().toString());
+					Utils.writePath("quast.py", file.toPath().toString());
 
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		});
+		filesPanel.add(chooseQuastFileButton);
 		/*JPanel checkRaven = new JPanel();
 		checkRaven.add(ravenPath);
 		checkRaven.add(chooseRavenFileButton);
 
 		filesPanel.add(checkRaven);*/
-		
-		filesPanel.add(ravenPath);
-		filesPanel.add(chooseRavenFileButton);
 		
 		JLabel sequencesLabel = new JLabel("Sequences file(s):", SwingConstants.LEFT);
 		filesPanel.add(sequencesLabel);
@@ -130,7 +157,7 @@ public class RavenPanel extends JPanel {
 		
 		filesPanel.add(new JPanel());
 		
-		SpringUtilities.makeCompactGrid(filesPanel, 3, 3, 5, 5, 10, 10);
+		SpringUtilities.makeCompactGrid(filesPanel, 4, 3, 5, 5, 10, 10);
 		
 		this.add(filesPanel);
 		
@@ -166,7 +193,7 @@ public class RavenPanel extends JPanel {
 				return result;
 			} catch (NumberFormatException e) {
 				JOptionPane.showMessageDialog(filesPanel, "Illegal " + dataType + " value!", 
-						"Dialog", JOptionPane.ERROR_MESSAGE);
+						"Error", JOptionPane.ERROR_MESSAGE);
 				return -2;
 			}
 			

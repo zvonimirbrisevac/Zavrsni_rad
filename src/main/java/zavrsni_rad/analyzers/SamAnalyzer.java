@@ -45,9 +45,8 @@ public class SamAnalyzer extends JFrame {
 		for (int i = 0; i < data.length; i++)
 			System.out.println(data[i]);
 
-		getDataFromFile(data);
-
-		initGUI();
+		if (getDataFromFile(data))
+			initGUI();
 	}
 
 	private void initGUI() {
@@ -114,11 +113,11 @@ public class SamAnalyzer extends JFrame {
 		this.add(southPanel, BorderLayout.SOUTH);
 	}
 
-	public void getDataFromFile(String[] data) throws IOException {
+	public boolean getDataFromFile(String[] data) throws IOException {
 		File outputFile = new File(data[3]);
 		if (!outputFile.exists()) {
 			JOptionPane.showMessageDialog(this, "Output file not found.", "Error", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 		List<String> content = new ArrayList<>(Files.readAllLines(outputFile.toPath()));
 		/*for (int i = 0; i < content.size(); i++) {
@@ -161,6 +160,6 @@ public class SamAnalyzer extends JFrame {
 				secondaryAligns++;
 
 		}
-
+		return true;
 	}
 }

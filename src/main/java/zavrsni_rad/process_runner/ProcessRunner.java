@@ -78,7 +78,6 @@ public class ProcessRunner {
 		Process process = pb.start();
 		//System.out.println("zavrsio start");
 		String timeStampStart = new SimpleDateFormat("dd.MM.yyyy. HH:mm:ss").format(new Date());
-		
 		List<String> fileContent = new ArrayList<>(Files.readAllLines(allProcessLog.toPath()));
 		int id = 1;
 		if (!fileContent.isEmpty()) {
@@ -105,7 +104,7 @@ public class ProcessRunner {
 		
 		SwingUtilities.invokeLater(() -> {
 			JOptionPane.showMessageDialog(new JFrame(), "Process running. Id = " + Integer.toString(finalId), 
-								"", JOptionPane.INFORMATION_MESSAGE);
+								"Process started", JOptionPane.INFORMATION_MESSAGE);
 		});
 				
 		System.out.println("Process " + id +" running...");
@@ -136,7 +135,7 @@ public class ProcessRunner {
 		
 		if (status == 0)
 			SwingUtilities.invokeLater(() -> {
-				JOptionPane.showMessageDialog(new JFrame(), "Process finished.\n (id = " + Integer.toString(finalId), 
+				JOptionPane.showMessageDialog(new JFrame(), "Process finished.\n Id = " + Integer.toString(finalId), 
 						"Success", JOptionPane.INFORMATION_MESSAGE);
 			});
 		else 

@@ -43,9 +43,8 @@ public class PafAnalyzer extends JFrame{
 		setLocation(200, 200);
 		setTitle("Result");
 		
-		getDataFromFile(data);
-		
-		initGUI();
+		if (getDataFromFile(data))
+			initGUI();
 		
 	}
 	
@@ -104,12 +103,12 @@ public class PafAnalyzer extends JFrame{
 		
 	}
 	
-	public void getDataFromFile(String[] data) throws IOException {
+	public boolean getDataFromFile(String[] data) throws IOException {
 		File outputFile = new File(data[3]);
 		if (!outputFile.exists()) {
 			JOptionPane.showMessageDialog(this, "Output file not found.",
 					"Error", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		}
 		List<String> content = new ArrayList<>(Files.readAllLines(outputFile.toPath()));
 		fileLength = content.size();
@@ -127,5 +126,6 @@ public class PafAnalyzer extends JFrame{
 			totalAlignmentBlockLength += Long.parseLong(pafData[10]);
 			totalMappingQuality += Long.parseLong(pafData[11]);
 		}
+		return true;
 	}
 }
