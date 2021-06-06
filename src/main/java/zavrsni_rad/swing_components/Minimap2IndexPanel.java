@@ -26,13 +26,12 @@ import zavrsni_rad.utils.Utils;
 public class Minimap2IndexPanel extends JPanel {
 	
 	private JPanel filesPanel;
-	private JPanel targetPanel;
-	private JPanel indexPanel;
 	private Minimap2IndexingOptPanel optionalPanel;
 	private JTextField targetPath;
 	private JTextField mmPath;
 	private JTextField indexPath;
-	
+	private JFormattedTextField threadsField;
+	private JTextField addOptionsField;
 	
 	public Minimap2IndexPanel() throws IOException {
 		
@@ -63,14 +62,10 @@ public class Minimap2IndexPanel extends JPanel {
 			}
 		});
 		
-		JPanel check = new JPanel();
-		check.add(mmPath);
-		check.add(chooseFileButton);
 
-		filesPanel.add(check);
-		
-		targetPanel = new JPanel();
-		
+		filesPanel.add(mmPath);
+		filesPanel.add(chooseFileButton);
+				
 		JLabel targetLabel = new JLabel("Target file:", SwingConstants.LEFT);
 
 		targetPath = new JTextField(16);
@@ -86,36 +81,36 @@ public class Minimap2IndexPanel extends JPanel {
 			}
 		});
 
-		targetPanel.add(targetPath);
-		targetPanel.add(chooseTargetButton);
-
 		filesPanel.add(targetLabel);
-		filesPanel.add(targetPanel);
+		filesPanel.add(targetPath);
+		filesPanel.add(chooseTargetButton);
 		
-		indexPanel = new JPanel();
-		JLabel indexLabel = new JLabel("Index file:", SwingConstants.LEFT);
+		JLabel threadsLabel = new JLabel("Number of threads: ", SwingConstants.LEFT);
 		
-		filesPanel.add(indexLabel);
+		NumberFormat threadsFormat = NumberFormat.getInstance();
+		NumberFormatter threadsFormatter = new NumberFormatter(threadsFormat);
+		threadsFormatter.setValueClass(Integer.class);
+		threadsFormatter.setMinimum(0);
+		threadsFormatter.setMaximum(Integer.MAX_VALUE);
+		//threadsFormatter.setAllowsInvalid(false);
+		// threadsFormatter.setCommitsOnValidEdit(true);
+		threadsField = new JFormattedTextField(threadsFormatter);
+		threadsField.setColumns(16);
+		//filesPanel.add(indexPanel);
 		
-		indexPath = new JTextField(16);
-
-		JButton chooseIndexFiles = new JButton("Choose file");
-		chooseIndexFiles.addActionListener((e) -> {
-			JFileChooser fileChooser = null;
-			fileChooser = new JFileChooser();
-			int returnValue = fileChooser.showOpenDialog(Minimap2IndexPanel.this);
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				File file = fileChooser.getSelectedFile();
-				indexPath.setText(file.toPath().toString());
-			}
-		});
-
-		indexPanel.add(indexPath);
-		indexPanel.add(chooseIndexFiles);
-
-		filesPanel.add(indexPanel);
+		filesPanel.add(threadsLabel);
+		filesPanel.add(threadsField);
+		filesPanel.add(new JPanel());
 		
-		SpringUtilities.makeCompactGrid(filesPanel, 3, 2, 5, 5, 10, 10);
+		JLabel addOptionsLabel = new JLabel("Other optional arguments: ", SwingConstants.LEFT);
+		
+		addOptionsField = new JTextField(16);
+		
+		filesPanel.add(addOptionsLabel);
+		filesPanel.add(addOptionsField);
+		filesPanel.add(new JPanel());
+		
+		SpringUtilities.makeCompactGrid(filesPanel, 4, 3, 5, 5, 10, 10);
 		add(filesPanel);
 		
 		//optionalPanel = new Minimap2IndexingOptPanel();
@@ -144,12 +139,29 @@ public class Minimap2IndexPanel extends JPanel {
 		return targetPath.getText();
 	}
 	
-	public String getIndexPath() {
-		if (indexPath.getText().equals("")) {
-			JOptionPane.showMessageDialog(this, "No index path!", "Dialog", JOptionPane.ERROR_MESSAGE);
-
+	public int getThreadsField() {
+		return getIntValueFromField(threadsField, "threads");
+	}
+	
+	
+	public int getIntValueFromField(JFormattedTextField field, String dataType) {
+		String s = field.getText();
+		if (!s.equals("")) {
+			try {
+				int result = Integer.parseInt(s);
+				return result;
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Illegal " + dataType + " value!", 
+						"Error", JOptionPane.ERROR_MESSAGE);
+				return -2;
+			}
+			
 		}
-		return indexPath.getText();
+		return -1;
+	}
+	
+	public String getAddOptions() {
+		return addOptionsField.getText();
 	}
 	
 	
@@ -157,6 +169,7 @@ public class Minimap2IndexPanel extends JPanel {
 	public void clearFields() {
 		targetPath.setText("");
 		indexPath.setText("");
-		
+		addOptionsField.setText("");
+		threadsField.setText("");
 	}
 }

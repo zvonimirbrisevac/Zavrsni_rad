@@ -33,6 +33,10 @@ public class RamExecution extends SwingWorker<Void, Void>{
 		else
 			return null;
 		
+		String addOptions = panel.getAddOptions();
+		if (!addOptions.equals(""))
+			commands.add(addOptions);
+		
 		int threads = panel.getThreadsField();
 		if (threads == -2) 
 			return null;

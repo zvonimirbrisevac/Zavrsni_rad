@@ -9,13 +9,13 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
 import zavrsni_rad.main_app.App;
-import zavrsni_rad.swing_components.Minimap2AlignPanel;
+import zavrsni_rad.swing_components.Minimap2IndexPanel;
 
-public class Minimap2AlignExecution extends SwingWorker<Integer, Integer> {
+public class Minimap2IndexExecution extends SwingWorker<Integer, Integer> {
 	
-	private Minimap2AlignPanel panel;
+	private Minimap2IndexPanel panel;
 	
-	public Minimap2AlignExecution(Minimap2AlignPanel panel) {
+	public Minimap2IndexExecution(Minimap2IndexPanel panel) {
 		super();
 		this.panel = panel;
 		
@@ -35,13 +35,7 @@ public class Minimap2AlignExecution extends SwingWorker<Integer, Integer> {
 		else
 			return null;
 		
-		String preset = panel.getPreset();
-		if (!preset.equals("")) {
-			commands.add("-ax");
-			commands.add(preset);
-		} else {
-			commands.add("-a");
-		}
+		commands.add("-d");
 		
 		String addOptions = panel.getAddOptions();
 		if (!addOptions.equals(""))
@@ -55,22 +49,12 @@ public class Minimap2AlignExecution extends SwingWorker<Integer, Integer> {
 			commands.add(Integer.toString(threads));
 		}
 		
-		boolean cigar = panel.getCigarCheck();
-		if (cigar)
-			commands.add("-c");
-		
 		String targetPath = panel.getTargetPath();
 		if (!targetPath.equals(""))
 			commands.add(targetPath);
 		else
 			return null;
 		
-		String seqPaths = panel.getSequencesPath();
-		if (seqPaths != null)
-			for(String s: seqPaths.split(";"))
-				commands.add(s);
-		else
-			return null;
 		
 		commands.add(App.PanelType.MINIMAP2_ALIGN.toString());
 		
@@ -95,5 +79,5 @@ public class Minimap2AlignExecution extends SwingWorker<Integer, Integer> {
 		
 		return null;
 	}
-	
+
 }

@@ -45,6 +45,8 @@ public class ProcessRunner {
 			ext = ".sam";
 		else if (type.equals("RAVEN"))
 			ext = ".fasta";
+		else if (type.equals("MINIMAP2_INDEXING"))
+			ext = ".mmi";
 		
 		
 		int index = 1;
@@ -88,7 +90,7 @@ public class ProcessRunner {
 		final int finalId = id;
 		StringBuilder sb = new StringBuilder();
 		sb.append(Integer.toString(id) + " : ");
-		if (!type.equals(App.PanelType.RAVEN.toString()))	
+		if (!type.equals(App.PanelType.RAVEN.toString()) && !type.equals(App.PanelType.MINIMAP2_INDEXING.toString()))	
 			sb.append(refFile + " : ");
 		else
 			sb.append("- : ");

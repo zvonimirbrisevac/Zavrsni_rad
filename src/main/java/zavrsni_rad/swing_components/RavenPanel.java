@@ -30,6 +30,7 @@ public class RavenPanel extends JPanel {
 	private JTextField quastPath;
 	private JTextField sequencesPath;
 	private JFormattedTextField threadsField;
+	private JTextField addOptionsField;
 	
 	public RavenPanel() throws IOException {
 		super();
@@ -141,23 +142,19 @@ public class RavenPanel extends JPanel {
 		threadsField.setColumns(16);
 		threadsField.resize(ravenPath.getSize());
 		
-		//filesPanel.add(threadsField);
-		
-		//filesPanel.add(new JPanel());
-		
-		//threadsPanel.setLayout(new GridLayout(1, 1));
-		threadsPanel.add(threadsField);
-		//threadsPanel.add(new JPanel());
-		//JButton b = new JButton("bzvz");
-		//b.setVisible(false);
-		//b.disable();
-		//threadsPanel.add(b);
-		
 		filesPanel.add(threadsField);
 		
 		filesPanel.add(new JPanel());
 		
-		SpringUtilities.makeCompactGrid(filesPanel, 4, 3, 5, 5, 10, 10);
+		JLabel addOptionsLabel = new JLabel("Other optional arguments: ", SwingConstants.LEFT);
+		
+		addOptionsField = new JTextField(16);
+		
+		filesPanel.add(addOptionsLabel);
+		filesPanel.add(addOptionsField);
+		filesPanel.add(new JPanel());
+		
+		SpringUtilities.makeCompactGrid(filesPanel, 5, 3, 5, 5, 10, 10);
 		
 		this.add(filesPanel);
 		
@@ -199,11 +196,16 @@ public class RavenPanel extends JPanel {
 			
 		}
 		return -1;
+	} 
+	
+	public String getAddOptions() {
+		return addOptionsField.getText();
 	}
 
 	public void clearFields() {
 		sequencesPath.setText("");
 		threadsField.setText("");
+		addOptionsField.setText("");
 	}
 	
 	

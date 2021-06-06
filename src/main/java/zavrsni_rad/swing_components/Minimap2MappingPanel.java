@@ -30,6 +30,7 @@ public class Minimap2MappingPanel extends JPanel{
 	private JTextField queryPath;
 	private JFormattedTextField threadsField;
 	private JComboBox<String> presetBox;
+	private JTextField addOptionsField;
 	
 	public Minimap2MappingPanel() throws IOException {
 		
@@ -150,8 +151,16 @@ public class Minimap2MappingPanel extends JPanel{
 		
 		this.add(new JPanel());
 		
+		JLabel addOptionsLabel = new JLabel("Other optional arguments: ", SwingConstants.LEFT);
 		
-		SpringUtilities.makeCompactGrid(this, 5, 3, 5, 5, 10, 10);
+		addOptionsField = new JTextField(16);
+		
+		this.add(addOptionsLabel);
+		this.add(addOptionsField);
+		this.add(new JPanel());
+		
+		
+		SpringUtilities.makeCompactGrid(this, 6, 3, 5, 5, 10, 10);
 		
 	}
 	
@@ -184,6 +193,10 @@ public class Minimap2MappingPanel extends JPanel{
 		return getIntValueFromField(threadsField, "threads");
 	}
 	
+	public String getAddOptions() {
+		return addOptionsField.getText();
+	}
+	
 	
 	public int getIntValueFromField(JFormattedTextField field, String dataType) {
 		String s = field.getText();
@@ -206,6 +219,7 @@ public class Minimap2MappingPanel extends JPanel{
 		queryPath.setText("");
 		threadsField.setText("");
 		presetBox.setSelectedItem("");
+		addOptionsField.setText("");
 	}
 
 	public String getPreset() {		

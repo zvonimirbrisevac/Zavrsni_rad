@@ -39,6 +39,11 @@ public class Minimap2MappingExecution extends SwingWorker<Void, Void>{
 			commands.add(preset);
 		}
 		
+		String addOptions = panel.getAddOptions();
+		if (!addOptions.equals("")) {
+			commands.add(addOptions);
+		}
+		
 		int threads = panel.getThreadsField();
 		if (threads == -2) 
 			return null;

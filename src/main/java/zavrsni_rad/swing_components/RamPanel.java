@@ -39,6 +39,7 @@ public class RamPanel extends JPanel {
 	private JTextField sequencesPath;
 	private JTextField pafPath;
 	private JFormattedTextField threadsField;
+	private JTextField addOptionsField;
 
 	public RamPanel() throws IOException {
 		
@@ -171,9 +172,16 @@ public class RamPanel extends JPanel {
 
 		filesPanel.add(pafPanel);*/
 		
+		JLabel addOptionsLabel = new JLabel("Other optional arguments: ", SwingConstants.LEFT);
+		
+		addOptionsField = new JTextField(16);
+		
+		filesPanel.add(addOptionsLabel);
+		filesPanel.add(addOptionsField);
+		filesPanel.add(new JPanel());
 		
 		
-		SpringUtilities.makeCompactGrid(filesPanel, 4, 3, 5, 5, 10, 10);
+		SpringUtilities.makeCompactGrid(filesPanel, 5, 3, 5, 5, 10, 10);
 		add(filesPanel);
 
 		//optionalPanel = new RamOptPanel(); 
@@ -206,11 +214,8 @@ public class RamPanel extends JPanel {
 		return sequencesPath.getText();
 	}
 
-	public String getPafPath() {
-		if (pafPath.getText().equals("")) {
-			JOptionPane.showMessageDialog(this, "No PAF path!", "Dialog", JOptionPane.ERROR_MESSAGE);
-		}
-		return pafPath.getText();
+	public String getAddOptions() {
+		return addOptionsField.getText();
 	}
 	
 	public int getThreadsField() {
@@ -225,7 +230,7 @@ public class RamPanel extends JPanel {
 		targetPath.setText("");
 		sequencesPath.setText("");
 		//pafPath.setText("");
-	
+		addOptionsField.setText("");
 		threadsField.setText("");
 	}
 

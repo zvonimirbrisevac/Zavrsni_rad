@@ -39,6 +39,7 @@ public class Minimap2AlignPanel extends JPanel {
 	private JTextField samPath;
 	private JFormattedTextField threadsField;
 	private JComboBox<String> presetBox;
+	private JTextField addOptionsField;
 	private JCheckBox cigarBox;
 	
 		
@@ -189,6 +190,14 @@ public class Minimap2AlignPanel extends JPanel {
 		filesPanel.add(presetBox);
 		filesPanel.add(new JPanel());
 		
+		JLabel addOptionsLabel = new JLabel("Other optional arguments: ", SwingConstants.LEFT);
+		
+		addOptionsField = new JTextField(16);
+		
+		filesPanel.add(addOptionsLabel);
+		filesPanel.add(addOptionsField);
+		filesPanel.add(new JPanel());
+		
 		
 		cigarBox = new JCheckBox("Generate cigar string");
 		
@@ -197,7 +206,7 @@ public class Minimap2AlignPanel extends JPanel {
 		filesPanel.add(new JPanel());
 		
 		
-		SpringUtilities.makeCompactGrid(filesPanel, 6, 3, 5, 5, 10, 10);
+		SpringUtilities.makeCompactGrid(filesPanel, 7, 3, 5, 5, 10, 10);
 		add(filesPanel);
 		
 		/*indexOptionalPanel = new Minimap2AlignOptPanel();
@@ -263,6 +272,7 @@ public class Minimap2AlignPanel extends JPanel {
 		refPath.setText("");
 		queryPath.setText("");
 		threadsField.setText("");
+		addOptionsField.setText("");
 		presetBox.setSelectedItem("");
 		cigarBox.setSelected(false);
 	}
@@ -288,5 +298,9 @@ public class Minimap2AlignPanel extends JPanel {
 		}
 		
 		return "";
+	}
+	
+	public String getAddOptions() {
+		return addOptionsField.getText();
 	}
 }

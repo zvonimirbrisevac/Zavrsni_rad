@@ -43,6 +43,7 @@ import zavrsni_rad.swing_components.ProcessesTable;
 import zavrsni_rad.swing_components.RamPanel;
 import zavrsni_rad.swing_components.RavenPanel;
 import zavrsni_rad.swing_workers.Minimap2AlignExecution;
+import zavrsni_rad.swing_workers.Minimap2IndexExecution;
 import zavrsni_rad.swing_workers.Minimap2MappingExecution;
 import zavrsni_rad.swing_workers.RamExecution;
 import zavrsni_rad.swing_workers.RavenExecution;
@@ -427,6 +428,8 @@ public class App extends JFrame {
 					new Minimap2MappingExecution((Minimap2MappingPanel)centralDataPanel).execute();
 				else if (dataType == PanelType.RAVEN)
 					new RavenExecution((RavenPanel)centralDataPanel).execute();
+				else if (dataType == PanelType.MINIMAP2_INDEXING)
+					new Minimap2IndexExecution((Minimap2IndexPanel) centralDataPanel).execute();
 			}
 		});
 	    buttonsGridPanel.add(buttonRun);
