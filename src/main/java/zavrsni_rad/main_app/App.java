@@ -36,6 +36,7 @@ import javax.swing.SwingUtilities;
 import zavrsni_rad.analyzers.PafAnalyzer;
 import zavrsni_rad.analyzers.SamAnalyzer;
 import zavrsni_rad.process_runner.ProcessRunner;
+import zavrsni_rad.swing_components.AdditionalArgumentsWindow;
 import zavrsni_rad.swing_components.Minimap2AlignPanel;
 import zavrsni_rad.swing_components.Minimap2IndexPanel;
 import zavrsni_rad.swing_components.Minimap2MappingPanel;
@@ -67,6 +68,8 @@ public class App extends JFrame {
 	public enum PanelType {
 		RAM_MAPPING, MINIMAP2_MAPPING, MINIMAP2_INDEXING, MINIMAP2_ALIGN, RAVEN;
 	}
+	
+	public static final String version = "VERSION 1.0";
 
 	public App() {
 		super();
@@ -74,8 +77,8 @@ public class App extends JFrame {
 		setSize(500, 500);
 		setLocation(100, 100);
 		setTitle("MapIt");
-		//ImageIcon icon = new ImageIcon("icons/MapIt_icon.png");
-		//setIconImage(icon);
+		// ImageIcon icon = new ImageIcon("icons/MapIt_icon.png");
+		// setIconImage(icon);
 		try {
 			initGUI();
 		} catch (IOException e) {
@@ -90,16 +93,16 @@ public class App extends JFrame {
 		System.out.println("Initializing GUI..");
 		LayoutManager layout = new BorderLayout();
 		this.setLayout(layout);
-		
+
 		centralPanel = new JPanel(new BorderLayout());
 		add(centralPanel, BorderLayout.CENTER);
-		
+
 		JMenuBar menuBar = new JMenuBar();
-		
+
 		JMenu toolsMenu = new JMenu("Tools");
-		
+
 		ButtonGroup tools = new ButtonGroup();
-		
+
 		JRadioButton minimap2IndRadio = new JRadioButton("Minimap2 indexing");
 		minimap2IndRadio.addActionListener((e) -> {
 			centralPanel.removeAll();
@@ -119,10 +122,10 @@ public class App extends JFrame {
 			centralPanel.revalidate();
 			centralPanel.repaint();
 			this.pack();
-			
+
 		});
 		tools.add(minimap2IndRadio);
-		
+
 		JRadioButton minimap2AlignRadio = new JRadioButton("Minimap2 alignment");
 		minimap2AlignRadio.addActionListener((e) -> {
 			centralPanel.removeAll();
@@ -142,10 +145,10 @@ public class App extends JFrame {
 			centralPanel.revalidate();
 			centralPanel.repaint();
 			this.pack();
-			
+
 		});
 		tools.add(minimap2AlignRadio);
-		
+
 		JRadioButton minimap2MappingRadio = new JRadioButton("Minimap2 mapping");
 		minimap2MappingRadio.addActionListener((e) -> {
 			centralPanel.removeAll();
@@ -165,13 +168,13 @@ public class App extends JFrame {
 			centralPanel.revalidate();
 			centralPanel.repaint();
 			this.pack();
-			
+
 		});
 		tools.add(minimap2MappingRadio);
-		
+
 		JRadioButton ramRadio = new JRadioButton("Ram");
 		ramRadio.addActionListener((e) -> {
-			//BorderLayout layout_temp = (BorderLayout) centra.getLayout();
+			// BorderLayout layout_temp = (BorderLayout) centra.getLayout();
 			centralPanel.removeAll();
 			try {
 				centralDataPanel = new RamPanel();
@@ -190,10 +193,10 @@ public class App extends JFrame {
 			centralPanel.repaint();
 			centralPanel.revalidate();
 			this.pack();
-			
+
 		});
 		tools.add(ramRadio);
-		
+
 		JRadioButton ravenRadio = new JRadioButton("Raven");
 		ravenRadio.addActionListener((e) -> {
 			centralPanel.removeAll();
@@ -213,11 +216,10 @@ public class App extends JFrame {
 			centralPanel.repaint();
 			centralPanel.revalidate();
 			this.pack();
-			
+
 		});
 		tools.add(ravenRadio);
-		
-		
+
 		toolsMenu.add(minimap2IndRadio);
 		toolsMenu.add(minimap2AlignRadio);
 		toolsMenu.add(minimap2MappingRadio);
@@ -225,97 +227,94 @@ public class App extends JFrame {
 		toolsMenu.add(ramRadio);
 		toolsMenu.add(new JSeparator(SwingConstants.HORIZONTAL));
 		toolsMenu.add(ravenRadio);
-		
+
 		minimap2AlignRadio.doClick();
 		menuBar.add(toolsMenu);
-		
+
 		JMenu processesMenu = new JMenu("Processes");
-		
+
 		JMenuItem checkoutProcessesMenu = new JMenuItem("Checkout processes");
 		checkoutProcessesMenu.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				SwingUtilities.invokeLater(() -> {
-		        	ProcessesTable table = new ProcessesTable();
-		        	table.setVisible(true);
-				}
-				);
+					ProcessesTable table = new ProcessesTable();
+					table.setVisible(true);
+				});
 			}
 		});
-	
+
 		processesMenu.add(checkoutProcessesMenu);
-		
+
 		JMenuItem analyzeProcessesMenu = new JMenuItem("Analyze process");
 		analyzeProcessesMenu.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				String id = null;
-				id = (String)JOptionPane.showInputDialog(
-	                    App.this, "Please enter process id: ",
-	                    "Enter id",
-	                    JOptionPane.PLAIN_MESSAGE,
-						null, null, "");
+				id = (String) JOptionPane.showInputDialog(App.this, "Please enter process id: ", "Enter id",
+						JOptionPane.PLAIN_MESSAGE, null, null, "");
 				if (id != null && !id.equals(""))
 					Utils.analyze(id, App.this);
-				
+
 			}
 		});
 		processesMenu.add(analyzeProcessesMenu);
-		
+
 		menuBar.add(processesMenu);
-		
+
 		JMenu helpMenu = new JMenu("Help");
-		
+
 		JMenuItem aboutMinimap2 = new JMenuItem("About Minimap2");
 		aboutMinimap2.addActionListener((e) -> {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-			    try {
+				try {
 					Desktop.getDesktop().browse(new URI("https://github.com/lh3/minimap2#table-of-contents"));
 				} catch (IOException | URISyntaxException e1) {
-					JOptionPane.showMessageDialog(App.this, "Something went wrong, failed to fetch:\n"
-							+ "https://github.com/lh3/minimap2#table-of-contents",
+					JOptionPane.showMessageDialog(App.this,
+							"Something went wrong, failed to fetch:\n"
+									+ "https://github.com/lh3/minimap2#table-of-contents",
 							"Error", JOptionPane.ERROR_MESSAGE);
 					e1.printStackTrace();
 				}
 			}
 		});
-		
+
 		JMenuItem aboutRam = new JMenuItem("About Ram");
 		aboutRam.addActionListener((e) -> {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-			    try {
+				try {
 					Desktop.getDesktop().browse(new URI("https://github.com/lbcb-sci/ram#ram"));
 				} catch (IOException | URISyntaxException e1) {
-					JOptionPane.showMessageDialog(App.this, "Something went wrong, failed to fetch:\n"
-							+ "https://github.com/lbcb-sci/ram#ram",
-							"Error", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(App.this,
+							"Something went wrong, failed to fetch:\n" + "https://github.com/lbcb-sci/ram#ram", "Error",
+							JOptionPane.ERROR_MESSAGE);
 					e1.printStackTrace();
 				}
 			}
 		});
-		
+
 		JMenuItem aboutRaven = new JMenuItem("About Raven");
 		aboutRaven.addActionListener((e) -> {
 			if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-			    try {
+				try {
 					Desktop.getDesktop().browse(new URI("https://github.com/lbcb-sci/raven#raven"));
 				} catch (IOException | URISyntaxException e1) {
-					JOptionPane.showMessageDialog(App.this, "Something went wrong, failed to fetch:\n"
-							+ "https://github.com/lbcb-sci/raven#raven ",
+					JOptionPane.showMessageDialog(App.this,
+							"Something went wrong, failed to fetch:\n" + "https://github.com/lbcb-sci/raven#raven ",
 							"Error", JOptionPane.ERROR_MESSAGE);
 					e1.printStackTrace();
 				}
 			}
 		});
-		
+
 		helpMenu.add(aboutMinimap2);
 		helpMenu.add(aboutRam);
 		helpMenu.add(aboutRaven);
-		
+
 		helpMenu.add(new JSeparator(SwingConstants.HORIZONTAL));
-		
+
 		JMenuItem minimap2Version = new JMenuItem("Minimap2 version");
 		minimap2Version.addActionListener((e) -> {
 			String path = null;
@@ -326,24 +325,25 @@ public class App extends JFrame {
 				e1.printStackTrace();
 			}
 			if (!path.equals("")) {
-				String version = null;
+				String toolVersion = null;
 				try {
-					version = Utils.getToolVersion(path);
+					toolVersion = Utils.getToolVersion(path);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				JOptionPane.showMessageDialog(App.this, "Your Minimap2 version:\n"
-						+ version,
-						"Your Minimap2 version", JOptionPane.INFORMATION_MESSAGE);
-				
+				JOptionPane.showMessageDialog(App.this, "Your Minimap2 version:\n" + toolVersion, "Your Minimap2 version",
+						JOptionPane.INFORMATION_MESSAGE);
+
 			} else {
-				JOptionPane.showMessageDialog(App.this, "Minimap2 not found, please check path to your Minimap2 program\n" +
-						"(Tools -> Minimap2 alignment/Minimapw mapping)",
-						"Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane
+						.showMessageDialog(App.this,
+								"Minimap2 not found, please check path to your Minimap2 program\n"
+										+ "(Tools -> Minimap2 alignment/Minimapw mapping)",
+								"Error", JOptionPane.ERROR_MESSAGE);
 			}
 		});
-		
+
 		JMenuItem ramVersion = new JMenuItem("Ram version");
 		ramVersion.addActionListener((e) -> {
 			String path = null;
@@ -354,24 +354,23 @@ public class App extends JFrame {
 				e1.printStackTrace();
 			}
 			if (!path.equals("")) {
-				String version = null;
+				String toolVersion = null;
 				try {
-					version = Utils.getToolVersion(path);
+					toolVersion = Utils.getToolVersion(path);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				JOptionPane.showMessageDialog(App.this, "Your Ram version:\n"
-						+ version,
-						"Your Ram version", JOptionPane.INFORMATION_MESSAGE);
-				
-			}else {
-				JOptionPane.showMessageDialog(App.this, "Ram not found, please check path to your Ram program\n" +
-						"(Tools -> Ram)",
-						"Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(App.this, "Your Ram version:\n" + toolVersion, "Your Ram version",
+						JOptionPane.INFORMATION_MESSAGE);
+
+			} else {
+				JOptionPane.showMessageDialog(App.this,
+						"Ram not found, please check path to your Ram program\n" + "(Tools -> Ram)", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		});
-		
+
 		JMenuItem ravenVersion = new JMenuItem("Raven version");
 		ravenVersion.addActionListener((e) -> {
 			String path = null;
@@ -382,76 +381,105 @@ public class App extends JFrame {
 				e1.printStackTrace();
 			}
 			if (!path.equals("")) {
-				String version = null;
+				String toolVersion = null;
 				try {
-					version = Utils.getToolVersion(path);
+					toolVersion = Utils.getToolVersion(path);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				JOptionPane.showMessageDialog(App.this, "Your Raven version:\n"
-						+ version,
-						"Your Raven version", JOptionPane.INFORMATION_MESSAGE);
-				
+				JOptionPane.showMessageDialog(App.this, "Your Raven version:\n" + toolVersion, "Your Raven version",
+						JOptionPane.INFORMATION_MESSAGE);
+
 			} else {
-				JOptionPane.showMessageDialog(App.this, "Raven not found, please check path to your Raven program\n" +
-						"(Tools -> Raven)",
-						"Error", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(App.this,
+						"Raven not found, please check path to your Raven program\n" + "(Tools -> Raven)", "Error",
+						JOptionPane.ERROR_MESSAGE);
 			}
 		});
-		
+
 		helpMenu.add(minimap2Version);
 		helpMenu.add(ramVersion);
 		helpMenu.add(ravenVersion);
-		
+
+		helpMenu.add(new JSeparator(SwingConstants.HORIZONTAL));
+
+		JMenuItem appInfo = new JMenuItem("About application");
+		appInfo.addActionListener((e) -> {
+			File aboutAppFile = new File("print_files/about_app.txt");
+			List<String> aboutAppInfo = null;
+			try {
+				aboutAppInfo = new ArrayList<>(Files.readAllLines(aboutAppFile.toPath()));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			StringBuilder sb = new StringBuilder();
+			for (String s : aboutAppInfo)
+				sb.append(s).append("\n");
+			sb.append("\n").append(version);
+			JOptionPane.showMessageDialog(App.this, sb.toString(), "About MapIt",
+					JOptionPane.INFORMATION_MESSAGE);
+			
+		});
+
+		helpMenu.add(appInfo);
+
+		JMenuItem aboutAddArg = new JMenuItem("About additional arguments");
+		aboutAddArg.addActionListener((e) -> {
+			AdditionalArgumentsWindow argWindow = new AdditionalArgumentsWindow();
+			argWindow.setVisible(true);
+		});
+		helpMenu.add(aboutAddArg);
+
 		menuBar.add(helpMenu);
-		
+
 		this.add(menuBar, BorderLayout.NORTH);
-		
+
 		JPanel buttonsPanel = new JPanel();
 
-	    JPanel buttonsGridPanel = new JPanel();
-	    buttonsGridPanel.setLayout(new GridLayout(1, 0, 10, 0));
-	    buttonsPanel.add(buttonsGridPanel);
+		JPanel buttonsGridPanel = new JPanel();
+		buttonsGridPanel.setLayout(new GridLayout(1, 0, 10, 0));
+		buttonsPanel.add(buttonsGridPanel);
 
-	    JButton buttonRun = new JButton("Run");
-	    //buttonRun.setAction(new RunAction(dataType));
-	    buttonRun.addActionListener(new ActionListener() {
-			
+		JButton buttonRun = new JButton("Run");
+		// buttonRun.setAction(new RunAction(dataType));
+		buttonRun.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (dataType == PanelType.RAM_MAPPING) 
-					new RamExecution((RamPanel)centralDataPanel).execute();
+				if (dataType == PanelType.RAM_MAPPING)
+					new RamExecution((RamPanel) centralDataPanel).execute();
 				else if (dataType == PanelType.MINIMAP2_ALIGN)
-					new Minimap2AlignExecution((Minimap2AlignPanel)centralDataPanel).execute();
+					new Minimap2AlignExecution((Minimap2AlignPanel) centralDataPanel).execute();
 				else if (dataType == PanelType.MINIMAP2_MAPPING)
-					new Minimap2MappingExecution((Minimap2MappingPanel)centralDataPanel).execute();
+					new Minimap2MappingExecution((Minimap2MappingPanel) centralDataPanel).execute();
 				else if (dataType == PanelType.RAVEN)
-					new RavenExecution((RavenPanel)centralDataPanel).execute();
+					new RavenExecution((RavenPanel) centralDataPanel).execute();
 				else if (dataType == PanelType.MINIMAP2_INDEXING)
 					new Minimap2IndexExecution((Minimap2IndexPanel) centralDataPanel).execute();
 			}
 		});
-	    buttonsGridPanel.add(buttonRun);
+		buttonsGridPanel.add(buttonRun);
 
-	    JButton buttonDelete = new JButton("Delete");
-	    buttonDelete.addActionListener(new ActionListener() {
-			
+		JButton buttonDelete = new JButton("Delete");
+		buttonDelete.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (dataType == PanelType.RAM_MAPPING) 
-		    		((RamPanel) centralDataPanel).clearFields();
-		    	else if (dataType == PanelType.MINIMAP2_ALIGN) 
-		    		((Minimap2AlignPanel) centralDataPanel).clearFields();
-		    	else if (dataType == PanelType.MINIMAP2_MAPPING)
-		    		((Minimap2MappingPanel) centralDataPanel).clearFields();
-		    	else if (dataType == PanelType.RAVEN)
-		    		((RavenPanel) centralDataPanel).clearFields();
+				if (dataType == PanelType.RAM_MAPPING)
+					((RamPanel) centralDataPanel).clearFields();
+				else if (dataType == PanelType.MINIMAP2_ALIGN)
+					((Minimap2AlignPanel) centralDataPanel).clearFields();
+				else if (dataType == PanelType.MINIMAP2_MAPPING)
+					((Minimap2MappingPanel) centralDataPanel).clearFields();
+				else if (dataType == PanelType.RAVEN)
+					((RavenPanel) centralDataPanel).clearFields();
 			}
-	    });
-	    buttonsGridPanel.add(buttonDelete);
-	    
-	    add(buttonsPanel, BorderLayout.SOUTH);
+		});
+		buttonsGridPanel.add(buttonDelete);
+
+		add(buttonsPanel, BorderLayout.SOUTH);
 
 	}
 
@@ -467,19 +495,23 @@ public class App extends JFrame {
 	 * }
 	 */
 
-
 	public static void main(String[] args) {
-		SwingUtilities.invokeLater(() -> {
-			App mainApp = new App();
-			mainApp.setVisible(true);
-			mainApp.pack();
+		if (args.length == 1 && (args[0].equals("--help") || args[0].equals("-h")))
+			try {
+				Utils.printHelp();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		else if (args.length == 0)
+			SwingUtilities.invokeLater(() -> {
+				App mainApp = new App();
+				mainApp.setVisible(true);
+				mainApp.pack();
 
-		});
+			});
+		else
+			System.out.println("Unclear arguments!");
 	}
-	
-	
-	
-	
-	
-	
+
 }

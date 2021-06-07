@@ -151,5 +151,21 @@ public class Utils {
 		reader.close();
 		return versionLine;
 	}
+	
+	public static void printHelp() throws IOException {
+		File aboutAppFile = new File("print_files/about_app.txt");
+		List<String> aboutAppInfo = new ArrayList<>(Files.readAllLines(aboutAppFile.toPath()));
+		for (String s : aboutAppInfo)
+			System.out.println(s);
+		System.out.println();
+		System.out.println(App.version);
+		System.out.println();
+		File aboutAddArgsFile = new File("print_files/additional_arguments_info.txt");
+		List<String> aboutAddArgs = new ArrayList<>(Files.readAllLines(aboutAddArgsFile.toPath()));
+		for (String s : aboutAddArgs)
+			System.out.println(s);
+		System.out.println();
+		
+	}
 
 }
