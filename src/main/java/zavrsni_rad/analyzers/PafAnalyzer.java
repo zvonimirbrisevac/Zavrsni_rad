@@ -52,7 +52,7 @@ public class PafAnalyzer extends JFrame{
 	
 	private void initGUI() {
 		
-		DecimalFormat df = new DecimalFormat("#.###");
+		DecimalFormat df = new DecimalFormat("#######.###");
 		
 		DecimalFormat lf = (DecimalFormat) NumberFormat.getInstance(Locale.US);
 		DecimalFormatSymbols symbols = lf.getDecimalFormatSymbols();
@@ -66,17 +66,17 @@ public class PafAnalyzer extends JFrame{
 		centralPanel.add(new JLabel("Average query coverage in alignment blocks:\t", SwingConstants.LEFT));
 		
 		double queryCoverage = averageQueryCoverage / fileLength;
-		centralPanel.add(new JLabel(df.format(queryCoverage), SwingConstants.LEFT));
+		centralPanel.add(new JLabel(df.format(queryCoverage * 100) + " %", SwingConstants.LEFT));
 		
 		centralPanel.add(new JLabel("Percentage of original relative strands:\t", SwingConstants.LEFT));
 		
 		double percOriginalStrands = ((double)positiveStrand) / fileLength;
-		centralPanel.add(new JLabel(df.format(percOriginalStrands), SwingConstants.LEFT));
+		centralPanel.add(new JLabel(df.format(percOriginalStrands * 100) + " %", SwingConstants.LEFT));
 		
 		centralPanel.add(new JLabel("Average percentage of matches in alignment block:\t", SwingConstants.LEFT));
 		
 		double averageResidueMatches = ((double) totalResidueMatches) / totalAlignmentBlockLength;
-		centralPanel.add(new JLabel(df.format(averageResidueMatches), SwingConstants.LEFT));
+		centralPanel.add(new JLabel(df.format(averageResidueMatches * 100) + " %", SwingConstants.LEFT));
 		
 		centralPanel.add(new JLabel("Average length of alignment block:\t", SwingConstants.LEFT));
 		

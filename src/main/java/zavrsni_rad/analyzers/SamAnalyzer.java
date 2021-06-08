@@ -41,9 +41,6 @@ public class SamAnalyzer extends JFrame {
 		setSize(500, 500);
 		setLocation(200, 200);
 		setTitle("Result");
-		System.out.println("Data za sam anal:");
-		for (int i = 0; i < data.length; i++)
-			System.out.println(data[i]);
 
 		if (getDataFromFile(data))
 			initGUI();
@@ -53,7 +50,7 @@ public class SamAnalyzer extends JFrame {
 
 	private void initGUI() {
 
-		DecimalFormat df = new DecimalFormat("#.###");
+		DecimalFormat df = new DecimalFormat("##.###");
 
 		DecimalFormat lf = (DecimalFormat) NumberFormat.getInstance(Locale.US);
 		DecimalFormatSymbols symbols = lf.getDecimalFormatSymbols();
@@ -73,29 +70,29 @@ public class SamAnalyzer extends JFrame {
 		centralPanel.add(new JLabel("Percentage of properly aligned alignments:\t", SwingConstants.LEFT));
 
 		double properPerc = ((double) properAligns) / dataSize;
-		centralPanel.add(new JLabel(df.format(properPerc), SwingConstants.LEFT));
+		centralPanel.add(new JLabel(df.format(properPerc * 100) + " %", SwingConstants.LEFT));
 
 		centralPanel.add(new JLabel("Percantage of alignments on original strand:\t", SwingConstants.LEFT));
 
 		double origPerc = ((double) originalSegments) / dataSize;
-		centralPanel.add(new JLabel(df.format(origPerc), SwingConstants.LEFT));
+		centralPanel.add(new JLabel(df.format(origPerc * 100) + " %", SwingConstants.LEFT));
 
 		centralPanel.add(new JLabel("Percentage of alignments with unmapped segment(s):\t", SwingConstants.LEFT));
 
 		double unmappedPerc = ((double) unmappedSegments) / dataSize;
-		centralPanel.add(new JLabel(df.format(unmappedPerc), SwingConstants.LEFT));
+		centralPanel.add(new JLabel(df.format(unmappedPerc * 100) + " %", SwingConstants.LEFT));
 
 		centralPanel.add(new JLabel("Percentage of secondary alignments:\t", SwingConstants.LEFT));
 
 		double secondPerc = ((double) secondaryAligns) / dataSize;
-		centralPanel.add(new JLabel(df.format(secondPerc), SwingConstants.LEFT));
+		centralPanel.add(new JLabel(df.format(secondPerc * 100) + " %", SwingConstants.LEFT));
 
 		centralPanel.add(new JLabel("Percentage of suplementary alignments:\t", SwingConstants.LEFT));
 
 		double suplementPerc = ((double) suplementaryAligns) / dataSize;
-		centralPanel.add(new JLabel(df.format(suplementPerc), SwingConstants.LEFT));
+		centralPanel.add(new JLabel(df.format(suplementPerc * 100) + " %", SwingConstants.LEFT));
 
-		centralPanel.add(new JLabel("Average mapping quality of alignments:\t", SwingConstants.LEFT));
+		centralPanel.add(new JLabel("Average mapping quality of alignments (0-255):\t", SwingConstants.LEFT));
 
 		double averageMapq = ((double) totalMapQuality) / dataSize;
 		centralPanel.add(new JLabel(df.format(averageMapq), SwingConstants.LEFT));
