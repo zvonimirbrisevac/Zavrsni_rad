@@ -475,6 +475,8 @@ public class App extends JFrame {
 					((Minimap2MappingPanel) centralDataPanel).clearFields();
 				else if (dataType == PanelType.RAVEN)
 					((RavenPanel) centralDataPanel).clearFields();
+				else if (dataType == PanelType.MINIMAP2_INDEXING)
+					((Minimap2IndexPanel) centralDataPanel).clearFields();
 			}
 		});
 		buttonsGridPanel.add(buttonDelete);

@@ -5,6 +5,7 @@ MINIMAP2 ADDITIONAL ARGUMENTS
     -k INT       k-mer size (no larger than 28) [15]
     -w INT       minimizer window size [10]
     -I NUM       split index for every ~NUM input bases [4G]
+  
   Mapping:
     -f FLOAT     filter out top FLOAT fraction of repetitive minimizers [0.0002]
     -g NUM       stop chain enlongation if there are no minimizers in INT-bp [5000]
@@ -16,6 +17,7 @@ MINIMAP2 ADDITIONAL ARGUMENTS
     -X           skip self and dual mappings (for the all-vs-all mode)
     -p FLOAT     min secondary-to-primary score ratio [0.8]
     -N INT       retain at most INT secondary alignments [5]
+  
   Alignment:
     -A INT       matching score [2]
     -B INT       mismatch penalty [4]
@@ -24,6 +26,7 @@ MINIMAP2 ADDITIONAL ARGUMENTS
     -z INT[,INT] Z-drop score and inversion Z-drop score [400,200]
     -s INT       minimal peak DP alignment score [80]
     -u CHAR      how to find GT-AG. f:transcript strand, b:both strands, n:don't match GT-AG [n]
+  
   Input/Output:
     -L           write CIGAR with >65535 ops at the CG tag
     -R STR       SAM read group line in a format like '@RG\tID:foo\tSM:bar' []

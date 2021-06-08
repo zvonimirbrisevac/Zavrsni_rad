@@ -97,6 +97,10 @@ public class Utils {
 							+ "Current status: " + data[7], 
 							"Error", JOptionPane.ERROR_MESSAGE);
 					return;
+				} else if (data[6].equals(PanelType.MINIMAP2_INDEXING.toString())){
+					JOptionPane.showMessageDialog(app, "Indexing can not be analyzed!", 
+							"Error", JOptionPane.ERROR_MESSAGE);
+					return;
 				}
 				if (data[6].equals(PanelType.MINIMAP2_MAPPING.toString()) || data[6].equals(PanelType.RAM_MAPPING.toString())) {
 					SwingUtilities.invokeLater(() -> {

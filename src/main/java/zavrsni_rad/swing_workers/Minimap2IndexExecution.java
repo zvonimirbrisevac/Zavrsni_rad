@@ -56,7 +56,7 @@ public class Minimap2IndexExecution extends SwingWorker<Integer, Integer> {
 			return null;
 		
 		
-		commands.add(App.PanelType.MINIMAP2_ALIGN.toString());
+		commands.add(App.PanelType.MINIMAP2_INDEXING.toString());
 		
 		for (String s : commands)
 			System.out.print(s + " ");

@@ -98,7 +98,7 @@ public class RavenPanel extends JPanel {
 
 		filesPanel.add(checkRaven);*/
 		
-		JLabel sequencesLabel = new JLabel("Sequences file(s):", SwingConstants.LEFT);
+		JLabel sequencesLabel = new JLabel("Query file(s):", SwingConstants.LEFT);
 		filesPanel.add(sequencesLabel);
 
 		sequencesPanel = new JPanel();

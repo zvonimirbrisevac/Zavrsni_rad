@@ -66,7 +66,7 @@ public class Minimap2IndexPanel extends JPanel {
 		filesPanel.add(mmPath);
 		filesPanel.add(chooseFileButton);
 				
-		JLabel targetLabel = new JLabel("Target file:", SwingConstants.LEFT);
+		JLabel targetLabel = new JLabel("Query file:", SwingConstants.LEFT);
 
 		targetPath = new JTextField(16);
 

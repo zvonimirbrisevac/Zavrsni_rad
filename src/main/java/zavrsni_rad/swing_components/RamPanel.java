@@ -79,7 +79,7 @@ public class RamPanel extends JPanel {
 		filesPanel.add(ramPath);
 		filesPanel.add(chooseRamFileButton);
 
-		JLabel targetLabel = new JLabel("Target file:", SwingConstants.LEFT);
+		JLabel targetLabel = new JLabel("Reference file:", SwingConstants.LEFT);
 		// filesPanel.add(targetLabel);
 
 		targetPanel = new JPanel();
@@ -105,7 +105,7 @@ public class RamPanel extends JPanel {
 		filesPanel.add(targetPath);
 		filesPanel.add(chooseTargetButton);
 		
-		JLabel sequencesLabel = new JLabel("Sequences file(s):", SwingConstants.LEFT);
+		JLabel sequencesLabel = new JLabel("Query file(s):", SwingConstants.LEFT);
 		filesPanel.add(sequencesLabel);
 
 		sequencesPanel = new JPanel();
