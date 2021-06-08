@@ -168,7 +168,7 @@ public class Minimap2IndexPanel extends JPanel {
 	
 	public void clearFields() {
 		targetPath.setText("");
-		indexPath.setText("");
+		//indexPath.setText("");
 		addOptionsField.setText("");
 		threadsField.setText("");
 	}

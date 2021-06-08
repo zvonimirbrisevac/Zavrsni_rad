@@ -51,7 +51,7 @@ public class FastaAnalyzer extends JFrame {
 	}
 	
 	private void initGUI() {
-		DecimalFormat df = new DecimalFormat("#.###");
+		DecimalFormat df = new DecimalFormat("##.###");
 		
 		DecimalFormat lf = (DecimalFormat) NumberFormat.getInstance(Locale.US);
 		DecimalFormatSymbols symbols = lf.getDecimalFormatSymbols();
@@ -72,7 +72,7 @@ public class FastaAnalyzer extends JFrame {
 		
 		centralPanel.add(new JLabel("Percentege of G and C nucleotides in the assembly:\t", SwingConstants.LEFT));
 		
-		centralPanel.add(new JLabel(df.format(GCpercentage / 100), SwingConstants.LEFT));
+		centralPanel.add(new JLabel(df.format(GCpercentage) + " %", SwingConstants.LEFT));
 		
 		centralPanel.add(new JLabel("N50 length:\t", SwingConstants.LEFT));
 		

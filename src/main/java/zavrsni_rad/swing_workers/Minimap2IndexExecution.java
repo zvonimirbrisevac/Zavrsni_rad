@@ -72,7 +72,7 @@ public class Minimap2IndexExecution extends SwingWorker<Integer, Integer> {
 			System.out.println(line);
 		}
 		if (process.waitFor() != 0) {
-			JOptionPane.showMessageDialog(new JFrame(), "Error occuered, process did nor start.",
+			JOptionPane.showMessageDialog(new JFrame(), "Error occuered, process did not start.",
 					"Error", JOptionPane.ERROR_MESSAGE);
 		}
 		//System.out.println(">>>>Rezultat executora: " + process.waitFor());

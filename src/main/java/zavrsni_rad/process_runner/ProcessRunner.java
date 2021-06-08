@@ -16,11 +16,11 @@ import javax.swing.SwingUtilities;
 import zavrsni_rad.main_app.App;
 
 public class ProcessRunner {
-	
+
 	public enum ProcessStates {
 		RUNNING, FAILED, FINISHED;
 	}
-	
+
 	public static void main(String[] args) throws IOException, InterruptedException {
 				
 		String type = args[args.length - 1];
@@ -48,27 +48,29 @@ public class ProcessRunner {
 		else if (type.equals("MINIMAP2_INDEXING"))
 			ext = ".mmi";
 		
-		
-		int index = 1;
-		String fileName = type + "_" + Integer.toString(index) + ext;
-		File outputFile = new File("output_files/" + fileName);
-		if (outputFile.exists()) {
-			while(true) {
-				index++;
-				fileName = type + "_" + Integer.toString(index) + ext;
-				outputFile = new File("output_files/" + fileName);
-				if (!outputFile.exists()) {
-					break;
-				}
-			}
+		List<String> fileContent = new ArrayList<>(Files.readAllLines(allProcessLog.toPath()));
+		int id = 1;
+		if (!fileContent.isEmpty()) {
+			String lastProcess = fileContent.get(fileContent.size() - 1);
+			int lastId = Integer.parseInt(lastProcess.split(" : ")[0]);
+			id = lastId + 1;
 		}
+		String fileName = type + "_" + Integer.toString(id) + ext;
+		File outputFile = new File("output_files/" + fileName);
 		outputFile.createNewFile();
 		
 		//System.out.println(">>>>>>Stvorio je output file<<<<<<<");
 		ArrayList<String> commands = new ArrayList<String>();
-		for (int i = 0; i < args.length - 1; i++)
-			commands.add(args[i]);
-		
+		if (!type.equals("MINIMAP2_INDEXING")) {
+			for (int i = 0; i < args.length - 1; i++)
+				commands.add(args[i]);
+		} else {
+			commands.add(args[0]);
+			commands.add(args[1]);
+			commands.add(outputFile.getAbsolutePath());
+			for (int i = 2; i < args.length - 1; i++)
+				commands.add(args[i]);
+		}
 		
 		///System.out.println(">>>>>>>>>>>Ide gradit processbuilder<<<<<<<<<");
 		ProcessBuilder pb = new ProcessBuilder(commands);
@@ -80,13 +82,7 @@ public class ProcessRunner {
 		Process process = pb.start();
 		//System.out.println("zavrsio start");
 		String timeStampStart = new SimpleDateFormat("dd.MM.yyyy. HH:mm:ss").format(new Date());
-		List<String> fileContent = new ArrayList<>(Files.readAllLines(allProcessLog.toPath()));
-		int id = 1;
-		if (!fileContent.isEmpty()) {
-			String lastProcess = fileContent.get(fileContent.size() - 1);
-			int lastId = Integer.parseInt(lastProcess.split(" : ")[0]);
-			id = lastId + 1;
-		}
+		
 		final int finalId = id;
 		StringBuilder sb = new StringBuilder();
 		sb.append(Integer.toString(id) + " : ");
