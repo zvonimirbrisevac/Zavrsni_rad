@@ -58,6 +58,8 @@ public class Minimap2IndexExecution extends SwingWorker<Integer, Integer> {
 		
 		commands.add(App.PanelType.MINIMAP2_INDEXING.toString());
 		
+		System.out.print("Executing command with ProcessRunner: ");
+
 		for (String s : commands)
 			System.out.print(s + " ");
 		System.out.println();

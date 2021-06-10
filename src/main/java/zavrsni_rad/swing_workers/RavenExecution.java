@@ -58,6 +58,8 @@ public class RavenExecution extends SwingWorker<Integer, Integer>{
 		
 		commands.add(App.PanelType.RAVEN.toString());
 		
+		System.out.print("Executing command with ProcessRunner: ");
+
 		for (String s : commands)
 			System.out.print(s + " ");
 		System.out.println();

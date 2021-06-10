@@ -61,6 +61,8 @@ public class RamExecution extends SwingWorker<Void, Void>{
 		
 		commands.add(App.PanelType.RAM_MAPPING.toString());
 		
+		System.out.print("Executing command with ProcessRunner: ");
+
 		for (String s : commands)
 			System.out.print(s + " ");
 		System.out.println();

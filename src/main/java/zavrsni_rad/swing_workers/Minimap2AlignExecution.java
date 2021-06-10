@@ -67,13 +67,13 @@ public class Minimap2AlignExecution extends SwingWorker<Integer, Integer> {
 		
 		String seqPaths = panel.getSequencesPath();
 		if (seqPaths != null)
-			for(String s: seqPaths.split(";"))
-				commands.add(s);
+			commands.add(seqPaths);
 		else
 			return null;
 		
 		commands.add(App.PanelType.MINIMAP2_ALIGN.toString());
 		
+		System.out.print("Executing command with ProcessRunner: ");
 		for (String s : commands)
 			System.out.print(s + " ");
 		System.out.println();

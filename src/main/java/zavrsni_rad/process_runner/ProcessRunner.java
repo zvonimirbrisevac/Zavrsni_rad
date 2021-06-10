@@ -58,12 +58,16 @@ public class ProcessRunner {
 		String fileName = type + "_" + Integer.toString(id) + ext;
 		File outputFile = new File("output_files/" + fileName);
 		outputFile.createNewFile();
+		File errorFile = new File("processes_streams/" + fileName.substring(0, fileName.length() - ext.length()) + "_stream.log");
+		errorFile.createNewFile();
 		
 		//System.out.println(">>>>>>Stvorio je output file<<<<<<<");
 		ArrayList<String> commands = new ArrayList<String>();
 		if (!type.equals("MINIMAP2_INDEXING")) {
-			for (int i = 0; i < args.length - 1; i++)
+			for (int i = 0; i < args.length - 2; i++)
 				commands.add(args[i]);
+			for (String s : querysFiles.split(";"))
+				commands.add(s);
 		} else {
 			commands.add(args[0]);
 			commands.add(args[1]);
@@ -72,10 +76,7 @@ public class ProcessRunner {
 				commands.add(args[i]);
 		}
 		
-		///System.out.println(">>>>>>>>>>>Ide gradit processbuilder<<<<<<<<<");
 		ProcessBuilder pb = new ProcessBuilder(commands);
-		File errorFile = new File("processes_streams/" + fileName.substring(0, fileName.length() - ext.length()) + "_stream.log");
-		errorFile.createNewFile();
 		pb.redirectError(errorFile);
 		pb.redirectOutput(outputFile);
 		//System.out.println("krece start");
@@ -101,7 +102,8 @@ public class ProcessRunner {
 		Files.write(allProcessLog.toPath(), fileContent);
 		
 		SwingUtilities.invokeLater(() -> {
-			JOptionPane.showMessageDialog(new JFrame(), "Process running. Id = " + Integer.toString(finalId), 
+			JOptionPane.showMessageDialog(new JFrame(), "Process running.\n" + 
+								"Process id = " + Integer.toString(finalId), 
 								"Process started", JOptionPane.INFORMATION_MESSAGE);
 		});
 				
@@ -133,12 +135,12 @@ public class ProcessRunner {
 		
 		if (status == 0)
 			SwingUtilities.invokeLater(() -> {
-				JOptionPane.showMessageDialog(new JFrame(), "Process finished.\n Id = " + Integer.toString(finalId), 
+				JOptionPane.showMessageDialog(new JFrame(), "Process finished.\nProcess id = " + Integer.toString(finalId), 
 						"Success", JOptionPane.INFORMATION_MESSAGE);
 			});
 		else 
 			SwingUtilities.invokeLater(() -> {
-				JOptionPane.showMessageDialog(new JFrame(), "Process failed. Id = " + Integer.toString(finalId) + "\n" +
+				JOptionPane.showMessageDialog(new JFrame(), "Process failed.\nProcess id = " + Integer.toString(finalId) + "\n" +
 						"More about why it failed:\n" + errorFile.getAbsolutePath(), 
 						"Failure", JOptionPane.ERROR_MESSAGE);
 			});

@@ -68,6 +68,8 @@ public class Minimap2MappingExecution extends SwingWorker<Void, Void>{
 		
 		commands.add(App.PanelType.MINIMAP2_MAPPING.toString());
 		
+		System.out.print("Executing command with ProcessRunner: ");
+
 		for (String s : commands)
 			System.out.print(s + " ");
 		System.out.println();
