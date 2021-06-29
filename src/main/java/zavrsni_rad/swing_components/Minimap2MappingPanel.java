@@ -62,12 +62,6 @@ public class Minimap2MappingPanel extends JPanel{
 			}
 
 		});
-
-		//JPanel checkMinimap2 = new JPanel();
-		//checkMinimap2.add(minimap2Path);
-		//checkMinimap2.add(chooseMinimap2FileButton);
-
-		//this.add(checkMinimap2);
 		
 		this.add(minimap2Path);
 		this.add(chooseMinimap2FileButton);
@@ -95,7 +89,6 @@ public class Minimap2MappingPanel extends JPanel{
 		JLabel queryLabel = new JLabel("Query file(s):", SwingConstants.LEFT);
 		this.add(queryLabel);
 
-		//queryPanel = new JPanel();
 		queryPath = new JTextField(16);
 
 		JButton chooseQueryFiles = new JButton("Choose file");
@@ -112,26 +105,18 @@ public class Minimap2MappingPanel extends JPanel{
 			}
 		});
 
-		//queryPanel.add(queryPath);
-		//queryPanel.add(chooseQueryFiles);
-
-		//this.add(queryPanel);
-		
 		this.add(queryPath);
 		this.add(chooseQueryFiles);
 		
 		JLabel threadsLabel = new JLabel("Number of threads (optional):", SwingConstants.LEFT);
 		this.add(threadsLabel);
 		
-		//threadsPanel = new JPanel();
-		
+
 		NumberFormat threadsFormat = NumberFormat.getInstance();
 		NumberFormatter threadsFormatter = new NumberFormatter(threadsFormat);
 		threadsFormatter.setValueClass(Integer.class);
 		threadsFormatter.setMinimum(0);
 		threadsFormatter.setMaximum(Integer.MAX_VALUE);
-		//threadsFormatter.setAllowsInvalid(false);
-		// threadsFormatter.setCommitsOnValidEdit(true);
 		threadsField = new JFormattedTextField(threadsFormatter);
 		threadsField.setColumns(16);
 		
@@ -206,7 +191,7 @@ public class Minimap2MappingPanel extends JPanel{
 				return result;
 			} catch (NumberFormatException e) {
 				JOptionPane.showMessageDialog(this, "Illegal " + dataType + " value!", 
-						"Dialog", JOptionPane.ERROR_MESSAGE);
+						"Error", JOptionPane.ERROR_MESSAGE);
 				return -2;
 			}
 			

@@ -26,7 +26,6 @@ import zavrsni_rad.utils.Utils;
 public class Minimap2IndexPanel extends JPanel {
 	
 	private JPanel filesPanel;
-	private Minimap2IndexingOptPanel optionalPanel;
 	private JTextField targetPath;
 	private JTextField mmPath;
 	private JTextField indexPath;
@@ -92,11 +91,9 @@ public class Minimap2IndexPanel extends JPanel {
 		threadsFormatter.setValueClass(Integer.class);
 		threadsFormatter.setMinimum(0);
 		threadsFormatter.setMaximum(Integer.MAX_VALUE);
-		//threadsFormatter.setAllowsInvalid(false);
-		// threadsFormatter.setCommitsOnValidEdit(true);
+		
 		threadsField = new JFormattedTextField(threadsFormatter);
 		threadsField.setColumns(16);
-		//filesPanel.add(indexPanel);
 		
 		filesPanel.add(threadsLabel);
 		filesPanel.add(threadsField);
@@ -113,15 +110,9 @@ public class Minimap2IndexPanel extends JPanel {
 		SpringUtilities.makeCompactGrid(filesPanel, 4, 3, 5, 5, 10, 10);
 		add(filesPanel);
 		
-		//optionalPanel = new Minimap2IndexingOptPanel();
-		//add(optionalPanel);
-		
 	}
 	
 	
-	public Minimap2IndexingOptPanel getIndOptPanel() {
-		return optionalPanel; 
-	}
 	
 	public String getMinimap2Path() {
 		if (mmPath.getText().equals("")) {
@@ -168,7 +159,6 @@ public class Minimap2IndexPanel extends JPanel {
 	
 	public void clearFields() {
 		targetPath.setText("");
-		//indexPath.setText("");
 		addOptionsField.setText("");
 		threadsField.setText("");
 	}

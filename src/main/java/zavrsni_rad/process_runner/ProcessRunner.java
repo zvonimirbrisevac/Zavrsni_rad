@@ -28,14 +28,11 @@ public class ProcessRunner {
 		System.out.println("Running " + type + "...");
 		
 		Files.createDirectories(new File("all_processes").toPath());
-		//System.out.println(">>>>Stvorio je all_processes");
 		Files.createDirectories(new File("output_files").toPath());
 		Files.createDirectories(new File("processes_streams").toPath());
 		
 		File allProcessLog = new File("all_processes/all_process.log");
 		allProcessLog.createNewFile();
-		//System.exit(1);
-		//System.out.println(">>>>>Stvorio je datoteke<<<<<<");
 		String refFile = args[args.length - 3];
 		String querysFiles = args[args.length - 2];
 		String ext = "";
@@ -61,7 +58,6 @@ public class ProcessRunner {
 		File errorFile = new File("processes_streams/" + fileName.substring(0, fileName.length() - ext.length()) + "_stream.log");
 		errorFile.createNewFile();
 		
-		//System.out.println(">>>>>>Stvorio je output file<<<<<<<");
 		ArrayList<String> commands = new ArrayList<String>();
 		if (!type.equals("MINIMAP2_INDEXING")) {
 			for (int i = 0; i < args.length - 2; i++)
@@ -79,9 +75,7 @@ public class ProcessRunner {
 		ProcessBuilder pb = new ProcessBuilder(commands);
 		pb.redirectError(errorFile);
 		pb.redirectOutput(outputFile);
-		//System.out.println("krece start");
 		Process process = pb.start();
-		//System.out.println("zavrsio start");
 		String timeStampStart = new SimpleDateFormat("dd.MM.yyyy. HH:mm:ss").format(new Date());
 		
 		final int finalId = id;
@@ -114,6 +108,7 @@ public class ProcessRunner {
 		String timeStampFinish = new SimpleDateFormat("dd.MM.yyyy. HH:mm:ss").format(new Date());
 		
 		System.out.println("Output file path: " + outputFile.getAbsolutePath().toString());
+		System.out.println();
 		
 		fileContent = new ArrayList<>(Files.readAllLines(allProcessLog.toPath()));
 		for (int i = 0; i < fileContent.size(); i++) {

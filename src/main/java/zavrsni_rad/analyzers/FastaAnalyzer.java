@@ -139,15 +139,7 @@ public class FastaAnalyzer extends JFrame {
 		}
 		File resultFile = new File(resultDir + "/report.tsv");
 		List<String> resultLines = new ArrayList<>(Files.readAllLines(resultFile.toPath()));
-		/*int i = 1;
-		for (String s : resultLines) {
-			System.out.print("Line " + (i++) + " : ");
-			String[] lineData = s.split("\t");
-			for (String s1 : lineData) {
-				System.out.print(s1 + ", ");
-			}
-			System.out.println();
-		}*/
+		
 		for (String s : resultLines) {
 			String[] lineData = s.split("\t");
 			if (lineData.length < 2)

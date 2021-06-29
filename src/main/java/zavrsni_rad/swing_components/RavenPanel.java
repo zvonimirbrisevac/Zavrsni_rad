@@ -92,11 +92,6 @@ public class RavenPanel extends JPanel {
 
 		});
 		filesPanel.add(chooseQuastFileButton);
-		/*JPanel checkRaven = new JPanel();
-		checkRaven.add(ravenPath);
-		checkRaven.add(chooseRavenFileButton);
-
-		filesPanel.add(checkRaven);*/
 		
 		JLabel sequencesLabel = new JLabel("Query file(s):", SwingConstants.LEFT);
 		filesPanel.add(sequencesLabel);
@@ -118,11 +113,6 @@ public class RavenPanel extends JPanel {
 			}
 		});
 
-		/*sequencesPanel.add(sequencesPath);
-		sequencesPanel.add(chooseSequencesFiles);
-
-		filesPanel.add(sequencesPanel);*/
-		
 		filesPanel.add(sequencesPath);
 		filesPanel.add(chooseSequencesFiles);
 		
@@ -136,11 +126,8 @@ public class RavenPanel extends JPanel {
 		threadsFormatter.setValueClass(Integer.class);
 		threadsFormatter.setMinimum(0);
 		threadsFormatter.setMaximum(Integer.MAX_VALUE);
-		//threadsFormatter.setAllowsInvalid(false);
-		// threadsFormatter.setCommitsOnValidEdit(true);
 		threadsField = new JFormattedTextField(threadsFormatter);
 		threadsField.setColumns(16);
-		threadsField.resize(ravenPath.getSize());
 		
 		filesPanel.add(threadsField);
 		

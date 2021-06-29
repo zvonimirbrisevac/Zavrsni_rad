@@ -61,12 +61,6 @@ public class SamAnalyzer extends JFrame {
 
 		centralPanel = new JPanel(new SpringLayout());
 
-		/*
-		 * private long dataSize = 0; private long totalMapQuality = 0; private long
-		 * unmappedSegments = 0; private long originalSegments = 0; private long
-		 * suplementaryAligns = 0; private long secondaryAligns = 0; private long
-		 * properAligns = 0;
-		 */
 		centralPanel.add(new JLabel("Percentage of properly aligned alignments:\t", SwingConstants.LEFT));
 
 		double properPerc = ((double) properAligns) / dataSize;
@@ -119,23 +113,12 @@ public class SamAnalyzer extends JFrame {
 			return false;
 		}
 		List<String> content = new ArrayList<>(Files.readAllLines(outputFile.toPath()));
-		/*for (int i = 0; i < content.size(); i++) {
-			if (content.get(i).startsWith("@")) {
-				System.out.println("Removat ce se: " + content.get(i));
-				content.remove(i);
-			} else {
-				System.out.println("Breakat ce se: " + content.get(i));
-				break;
-			}
-		}*/
-		//dataSize = content.size();
+		
 		for (String line : content) {
 			if (line.startsWith("@"))
 				continue;
 			dataSize++;
-			//System.out.println("Line: " + line);
 			String[] samData = line.split("\t");
-			//System.out.println("Mapping quality: " + samData[4]);
 			totalMapQuality += Integer.parseInt(samData[4]);
 			int flag = Integer.parseInt(samData[1]);
 			boolean properly = (flag & (1 << 1)) != 0;

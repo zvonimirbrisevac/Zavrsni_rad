@@ -39,7 +39,6 @@ public class AdditionalArgumentsWindow extends JFrame {
 	private void initGUI() throws IOException {
 		
 		this.setLayout(new BorderLayout());
-		//this.setBounds(10, 10, 10, 10);
 		
 		textArea = new JTextArea();
 		
@@ -53,13 +52,7 @@ public class AdditionalArgumentsWindow extends JFrame {
 		
 		scrollPane = new JScrollPane(textArea);
 		
-		/*centralPanel = new JPanel();
-		centralPanel.setAutoscrolls(true);
-		centralPanel.add(scrollPane);*/
-		
 		this.add(scrollPane);
-		
-		//this.add(centralPanel);
 		
 		southPanel = new JPanel();
 		

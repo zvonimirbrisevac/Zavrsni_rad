@@ -30,9 +30,7 @@ public class Minimap2AlignPanel extends JPanel {
 	private JPanel filesPanel;
 	private JPanel refPanel;
 	private JPanel queryPanel;
-	private Minimap2IndexingOptPanel indexOptionalPanel;
 	private JPanel samPanel;
-	private Minimap2AlignOptPanel alignOptionalPanel;
 	private JTextField minimap2Path;
 	private JTextField refPath;
 	private JTextField queryPath;
@@ -72,20 +70,12 @@ public class Minimap2AlignPanel extends JPanel {
 
 		});
 
-		//JPanel checkMinimap2 = new JPanel();
-		//checkMinimap2.add(minimap2Path);
-		//checkMinimap2.add(chooseMinimap2FileButton);
-
-		//filesPanel.add(checkMinimap2);
 		filesPanel.add(pleaseCheck);
 		filesPanel.add(minimap2Path);
 		filesPanel.add(chooseMinimap2FileButton);
 		
 		
 		JLabel refLabel = new JLabel("Reference file:", SwingConstants.LEFT);
-		// filesPanel.add(refLabel);
-
-		//refPanel = new JPanel();
 
 		refPath = new JTextField(16);
 
@@ -98,23 +88,16 @@ public class Minimap2AlignPanel extends JPanel {
 				File file = fileChooser.getSelectedFile();
 				refPath.setText(file.toPath().toString());
 			}
-			/*if (refPath.getText().endsWith(".mmi"))
-				disPanel.setEnabled(false);
-			else
-				disPanel.setEnabled(true);*/
+
 		});
 
-		//refPanel.add(refPath);
-		//refPanel.add(chooseRefButton);
 
 		filesPanel.add(refLabel);
-		//filesPanel.add(refPanel);
 		filesPanel.add(refPath);
 		filesPanel.add(chooseRefButton);
 		
 		JLabel queryLabel = new JLabel("Query file(s):", SwingConstants.LEFT);
 
-		//queryPanel = new JPanel();
 		queryPath = new JTextField(16);
 
 		JButton chooseQueryFiles = new JButton("Choose file");
@@ -134,9 +117,6 @@ public class Minimap2AlignPanel extends JPanel {
 		filesPanel.add(queryLabel);
 		filesPanel.add(queryPath);
 		filesPanel.add(chooseQueryFiles);
-
-		//filesPanel.add(queryPanel);
-
 		
 		JLabel threadsLabel = new JLabel("Number of threads (optional):", SwingConstants.LEFT);
 
@@ -145,8 +125,6 @@ public class Minimap2AlignPanel extends JPanel {
 		threadsFormatter.setValueClass(Integer.class);
 		threadsFormatter.setMinimum(0);
 		threadsFormatter.setMaximum(Integer.MAX_VALUE);
-		//threadsFormatter.setAllowsInvalid(false);
-		// threadsFormatter.setCommitsOnValidEdit(true);
 		threadsField = new JFormattedTextField(threadsFormatter);
 		threadsField.setColumns(16);
 		
@@ -155,29 +133,6 @@ public class Minimap2AlignPanel extends JPanel {
 		filesPanel.add(threadsField);
 		
 		filesPanel.add(new JPanel());
-		
-		/*JLabel samLabel = new JLabel("SAM file:", SwingConstants.LEFT);
-
-		filesPanel.add(samLabel);
-
-		samPanel = new JPanel();
-		samPath = new JTextField(16);
-
-		JButton samFile = new JButton("Choose file");
-		samFile.addActionListener((e) -> {
-			JFileChooser fileChooser = null;
-			fileChooser = new JFileChooser();
-			int returnValue = fileChooser.showOpenDialog(Minimap2AlignPanel.this);
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				File file = fileChooser.getSelectedFile();
-				samPath.setText(file.toPath().toString());
-			}
-		});
-
-		samPanel.add(samPath);
-		samPanel.add(samFile);
-
-		filesPanel.add(samPanel);*/
 		
 		JLabel presetLabel = new JLabel("Choose preset option (optional):", SwingConstants.LEFT);
 		
@@ -208,14 +163,6 @@ public class Minimap2AlignPanel extends JPanel {
 		
 		SpringUtilities.makeCompactGrid(filesPanel, 7, 3, 5, 5, 10, 10);
 		add(filesPanel);
-		
-		/*indexOptionalPanel = new Minimap2AlignOptPanel();
-		this.add(indexOptionalPanel);
-		
-		alignOptionalPanel =new Minimap2AlignOptPanel();
-		this.add(alignOptionalPanel);*/
-		
-
 		
 	}
 	

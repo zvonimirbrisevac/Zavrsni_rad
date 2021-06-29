@@ -58,11 +58,6 @@ public class App extends JFrame {
 
 	private JPanel centralPanel;
 	private JPanel centralDataPanel;
-	/*
-	 * private RamPanel ramMappingPanel; private Minimap2IndexPanel
-	 * minimap2IndexingPanel; private Minimap2AlignPanel minimap2AlignPanel; private
-	 * Minimap2MappingPanel minimap2MappingPanel; private RavenPanel ravenPanel;
-	 */
 	private PanelType dataType;
 
 	public enum PanelType {
@@ -77,8 +72,7 @@ public class App extends JFrame {
 		setSize(500, 500);
 		setLocation(100, 100);
 		setTitle("MapIt");
-		// ImageIcon icon = new ImageIcon("icons/MapIt_icon.png");
-		// setIconImage(icon);
+		
 		try {
 			initGUI();
 		} catch (IOException e) {
@@ -174,7 +168,6 @@ public class App extends JFrame {
 
 		JRadioButton ramRadio = new JRadioButton("Ram");
 		ramRadio.addActionListener((e) -> {
-			// BorderLayout layout_temp = (BorderLayout) centra.getLayout();
 			centralPanel.removeAll();
 			try {
 				centralDataPanel = new RamPanel();
@@ -484,18 +477,6 @@ public class App extends JFrame {
 		add(buttonsPanel, BorderLayout.SOUTH);
 
 	}
-
-	/*
-	 * private class RunAction extends AbstractAction { private PanelType type;
-	 * 
-	 * public RunAction(PanelType type) { super(); this.type = type; }
-	 * 
-	 * @Override public void actionPerformed(ActionEvent arg0) { if (type ==
-	 * PanelType.RAM_MAPPING) { RamMappingExecution ramMap = new
-	 * RamMappingExecution(); } }
-	 * 
-	 * }
-	 */
 
 	public static void main(String[] args) {
 		if (args.length == 1 && (args[0].equals("--help") || args[0].equals("-h")))

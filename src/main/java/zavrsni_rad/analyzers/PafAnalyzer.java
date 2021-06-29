@@ -116,10 +116,7 @@ public class PafAnalyzer extends JFrame{
 		fileLength = content.size();
 		for (String line : content) {
 			String[] pafData = line.split("\t");
-			/*System.out.println(">>>> data size: " + pafData.length);
-			for (int i = 0; i < pafData.length; i++) {
-				System.out.println("data " + i + " : " + pafData[i]);
-			}*/
+			
 			queryTotalLength += Long.parseLong(pafData[1]);
 			if (pafData[4].equals("+"))
 				positiveStrand++;

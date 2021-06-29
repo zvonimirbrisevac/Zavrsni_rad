@@ -32,7 +32,6 @@ public class RamPanel extends JPanel {
 	private JPanel filesPanel;
 	private JPanel targetPanel;
 	private JPanel sequencesPanel;
-	private RamOptPanel optionalPanel;
 	private JPanel pafPanel;
 	private JTextField ramPath;
 	private JTextField targetPath;
@@ -72,15 +71,10 @@ public class RamPanel extends JPanel {
 
 		});
 
-		/*JPanel checkRam = new JPanel();
-		checkRam.add(ramPath);
-		checkRam.add(chooseRamFileButton);*/
-
 		filesPanel.add(ramPath);
 		filesPanel.add(chooseRamFileButton);
 
 		JLabel targetLabel = new JLabel("Reference file:", SwingConstants.LEFT);
-		// filesPanel.add(targetLabel);
 
 		targetPanel = new JPanel();
 
@@ -97,11 +91,7 @@ public class RamPanel extends JPanel {
 			}
 		});
 
-		//targetPanel.add(targetPath);
-		//targetPanel.add(chooseTargetButton);
-
 		filesPanel.add(targetLabel);
-		//filesPanel.add(targetPanel);
 		filesPanel.add(targetPath);
 		filesPanel.add(chooseTargetButton);
 		
@@ -125,11 +115,6 @@ public class RamPanel extends JPanel {
 			}
 		});
 
-		/*sequencesPanel.add(sequencesPath);
-		sequencesPanel.add(chooseSequencesFiles);
-
-		filesPanel.add(sequencesPanel);*/
-		
 		filesPanel.add(sequencesPath);
 		filesPanel.add(chooseSequencesFiles);
 
@@ -142,36 +127,12 @@ public class RamPanel extends JPanel {
 		threadsFormatter.setValueClass(Integer.class);
 		threadsFormatter.setMinimum(0);
 		threadsFormatter.setMaximum(Integer.MAX_VALUE);
-		//threadsFormatter.setAllowsInvalid(false);
-		// threadsFormatter.setCommitsOnValidEdit(true);
 		threadsField = new JFormattedTextField(threadsFormatter);
 		threadsField.setColumns(16);
 		
 		filesPanel.add(threadsField);
 		filesPanel.add(new JPanel());
-		/*JLabel pafLabel = new JLabel("PAF file:", SwingConstants.LEFT);
-
-		filesPanel.add(pafLabel);
-
-		pafPanel = new JPanel();
-		pafPath = new JTextField(16);
-
-		JButton pafFile = new JButton("Choose file");
-		pafFile.addActionListener((e) -> {
-			JFileChooser fileChooser = null;
-			fileChooser = new JFileChooser();
-			int returnValue = fileChooser.showOpenDialog(RamPanel.this);
-			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				File file = fileChooser.getSelectedFile();
-				pafPath.setText(file.toPath().toString());
-			}
-		});
-
-		pafPanel.add(pafPath);
-		pafPanel.add(pafFile);
-
-		filesPanel.add(pafPanel);*/
-		
+	
 		JLabel addOptionsLabel = new JLabel("Other optional arguments: ", SwingConstants.LEFT);
 		
 		addOptionsField = new JTextField(16);
@@ -184,9 +145,6 @@ public class RamPanel extends JPanel {
 		SpringUtilities.makeCompactGrid(filesPanel, 5, 3, 5, 5, 10, 10);
 		add(filesPanel);
 
-		//optionalPanel = new RamOptPanel(); 
-
-		//add(optionalPanel);
 	}
 
 
@@ -219,21 +177,30 @@ public class RamPanel extends JPanel {
 	}
 	
 	public int getThreadsField() {
-		return RamOptPanel.getIntValueFromField(threadsField, "threads");
+		return getIntValueFromField(threadsField, "threads");
 	}
 
-	public RamOptPanel getRamOptPanel() {
-		return optionalPanel;
-	}
-	
 	public void clearFields() {
 		targetPath.setText("");
 		sequencesPath.setText("");
-		//pafPath.setText("");
 		addOptionsField.setText("");
 		threadsField.setText("");
 	}
 
-	
+	public int getIntValueFromField(JFormattedTextField field, String dataType) {
+		String s = field.getText();
+		if (!s.equals("")) {
+			try {
+				int result = Integer.parseInt(s);
+				return result;
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(this, "Illegal " + dataType + " value!", 
+						"Error", JOptionPane.ERROR_MESSAGE);
+				return -2;
+			}
+			
+		}
+		return -1;
+	}
 
 }

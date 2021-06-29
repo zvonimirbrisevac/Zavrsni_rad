@@ -76,7 +76,6 @@ public class ProcessesTable extends JFrame {
 
 		String[] processTypes = { "", "Minimap2 alignment", "Minimap2 mapping", "Raven", "Ram mapping" };
 		typeBox = new JComboBox<String>(processTypes);
-		// typeBox.addActionListener();
 		northPanel.add(typeBox);
 
 		northPanel.add(new JPanel());
@@ -86,7 +85,6 @@ public class ProcessesTable extends JFrame {
 
 		String[] statusTypes = { "", "Finished", "Running", "Failed" };
 		statusBox = new JComboBox<String>(statusTypes);
-		// statusBox.addActionListener();
 		northPanel.add(statusBox);
 
 		String[] columnNames = { "Id", "Reference file", "Query file(s)", "Output file", "Start timestamp",
@@ -100,7 +98,6 @@ public class ProcessesTable extends JFrame {
 				data[index][i] = processData[i];
 			index++;
 		}
-		// System.out.println(">>>>dodao je data u tablicu<<<<<");
 		table = new JTable(data, columnNames);
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
 		table.setRowSorter(sorter);
@@ -110,14 +107,9 @@ public class ProcessesTable extends JFrame {
 		for (int i = 1; i < 8; i++)
 			columnModel.getColumn(i).setPreferredWidth(1500);
 
-		// columnModel.getColumn(1).setPreferredWidth(100);
-		// columnModel.getColumn(2).
-
 		scrollPanel = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
-		// centralPanel = new JPanel();
-		// centralPanel.add(scrollPanel);
 		this.add(scrollPanel);
 
 		JPanel buttonPanel = new JPanel(new SpringLayout());
@@ -130,25 +122,8 @@ public class ProcessesTable extends JFrame {
 				sorter.setRowFilter(RowFilter.regexFilter(processType));
 			if (!statusType.equals(""))
 				sorter.setRowFilter(RowFilter.regexFilter(statusType));
-			/*
-			 * List<String> fileContent = null; try { fileContent = new
-			 * ArrayList<>(Files.readAllLines(processesFile.toPath())); } catch (IOException
-			 * e1) { // TODO Auto-generated catch block e1.printStackTrace(); } if
-			 * (!processType.equals("")) fileContent = fileContent.stream().filter(s ->
-			 * s.split(" : ")[6].equals(processType)).collect(Collectors.toList()); if
-			 * (!statusType.equals("")) fileContent = fileContent.stream().filter(s ->
-			 * s.split(" : ")[7].equals(statusType)).collect(Collectors.toList());
-			 * 
-			 * String[][] newData = new String[fileContent.size()][8]; int index = 0; for
-			 * (String s : fileContent) { String[] processData = s.split(" : "); for (int i
-			 * = 0; i < processData.length; i++) newData[index][i] = processData[i];
-			 * index++; } table = new JTable(newData);
-			 */
 		});
-		// filterButton.setPreferredSize(new Dimension(100, 25));
-		// filterButton.setMaximumSize(filterButton.getPreferredSize());
 		buttonPanel.add(filterButton, LEFT_ALIGNMENT);
-		// filterButton.setPreferredSize(new Dimension(150, 30));
 
 		northPanel.add(buttonPanel);
 
@@ -158,7 +133,6 @@ public class ProcessesTable extends JFrame {
 	}
 
 	public String getProcessEnum(String type) {
-		// "", "Minimap2 alignment", "Minimap2 mapping", "Raven", "Ram mapping"}
 		switch (type) {
 		case "Minimap2 alignment":
 			return App.PanelType.MINIMAP2_ALIGN.toString();
